@@ -13,10 +13,7 @@ func main() {
 	routers.AuthRouter(r)
 	// routers.MasterRouter(r)
 	// routers.AdministratorRouter(r)
-
+	
 	port := os.Getenv("PORT")
 	r.Run(":"+port)
-
-	// port := os.Getenv("PORT")
-	// r.Run(":"+port)
 }
