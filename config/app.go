@@ -6,9 +6,12 @@ import(
 	"github.com/joho/godotenv"
 	kivik "github.com/go-kivik/kivik/v3"
 	_"github.com/go-kivik/couchdb/v3"
-	"log"
 )
-func Connect(){
+var (db *kivik.DB)
+func init(){
+	db=Connect()
+}
+func Connect()(*kivik.DB){
 	// ctx := context.Background()
 	er := godotenv.Load()
 	if er !=nil{
@@ -21,5 +24,5 @@ func Connect(){
         panic(err)
     }
     db := client.DB(context.TODO(), "wms")
-    log.Println(db)
+    return db
 }
