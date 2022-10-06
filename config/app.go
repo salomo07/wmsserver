@@ -1,6 +1,7 @@
 package config
 
 import(
+	"log"
 	"os"
 	"context"
 	"github.com/joho/godotenv"
@@ -17,8 +18,8 @@ func Connect()(*kivik.DB){
 	if er !=nil{
 		panic("Fail to load .env file")
 	}
-	// log.Println(ctx)
 	DB_URL:=os.Getenv("DB_URL")
+	log.Println(DB_URL)
 	client, err := kivik.New("couch", DB_URL)
     if err != nil {
         panic(err)
