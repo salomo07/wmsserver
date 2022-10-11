@@ -19,7 +19,6 @@ func Update(strquery string)(string){
 	var objt UpdateObjt
 	
 	err:=json.Unmarshal([]byte(strquery),&objt)
-
 	if objt.Rev == "" || objt.Id==""{
 		return `{"error":"bad request","reason":"_id & _rev fields must include"}`
 	}
