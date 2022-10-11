@@ -9,8 +9,13 @@ func AuthRouter(r *gin.Engine) {
 	
 	master := r.Group("/auth")
 	{
-		master.GET("/getuser", func(c *gin.Context) {
-			c.JSON(200, gin.H{"result":controllers.GetUser(c)})
+		master.POST("/getuser", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.FindUser(c))
+		})
+		master.POST("/insertuser", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.InsertUser(c))
 		})
 	}
 }

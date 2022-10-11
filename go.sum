@@ -29,6 +29,7 @@ github.com/go-kit/log v0.1.0/go.mod h1:zbhenjAZHb184qTLMA9ZjW7ThYL0H2mk7Q6pNt4vb
 github.com/go-kivik/couchdb/v3 v3.3.0 h1:xipDIw66Sqei550OzSXWlLmJ9y01fMbBLkX0F/snjnw=
 github.com/go-kivik/couchdb/v3 v3.3.0/go.mod h1:idTUN/G5HGE+YP2EgW+dvZ5ODkdhvddcU7ZzFZfwN6Q=
 github.com/go-kivik/kivik/v3 v3.0.1/go.mod h1:7tmQDvkta/pcijpUjLMsQ9HJUELiKD5zm6jQ3Gb9cxE=
+github.com/go-kivik/kivik/v3 v3.2.0 h1:YQ6j89DrQwNdMdpWioObEP+pYTSAtF58HomS5ROfKc0=
 github.com/go-kivik/kivik/v3 v3.2.0/go.mod h1:chqVuHKAU9j2C7qL0cAH2FCO26oL+0B4aIBeCRMnLa8=
 github.com/go-kivik/kivik/v3 v3.2.3 h1:ZFGR3hMDa+AUmPUCQxq4da3+3C4awdFQwdOtjLS+MxM=
 github.com/go-kivik/kivik/v3 v3.2.3/go.mod h1:chqVuHKAU9j2C7qL0cAH2FCO26oL+0B4aIBeCRMnLa8=
