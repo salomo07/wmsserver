@@ -1,29 +1,64 @@
 package config
 
 import(
-	"log"
 	"os"
-	"context"
+  	"strings"
+  	"net/http"
+  	"io/ioutil"
 	"github.com/joho/godotenv"
-	kivik "github.com/go-kivik/kivik/v3"
-	_"github.com/go-kivik/couchdb/v3"
 )
-var (db *kivik.DB)
-func init(){
-	db=Connect()
-}
-func Connect()(*kivik.DB){
-	// ctx := context.Background()
+
+func Request(method string,pathURL string,strquery string)(string){
 	er := godotenv.Load()
 	if er !=nil{
 		panic("Fail to load .env file")
 	}
-	DB_URL:=os.Getenv("DB_URL")
-	log.Println(DB_URL)
-	client, err := kivik.New("couch", DB_URL)
-    if err != nil {
-        panic(err)
-    }
-    db := client.DB(context.TODO(), "wms")
-    return db
+	DB_HOST:=os.Getenv("DB_HOST")
+	payload := strings.NewReader(strquery)
+	client := &http.Client {}
+	req, err := http.NewRequest(method, DB_HOST+pathURL, payload)
+
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Content-Type", "application/json")
+
+	res, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+	return string(body)
+}
+func RequestWithoutPath(method string,strquery string)(string){
+	er := godotenv.Load()
+	if er !=nil{
+		panic("Fail to load .env file")
+	}
+	DB_HOST:=os.Getenv("DB_HOST")
+	payload := strings.NewReader(strquery)
+	client := &http.Client {}
+	req, err := http.NewRequest(method, DB_HOST, payload)
+
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Content-Type", "application/json")
+
+	res, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+	return string(body)
 }
