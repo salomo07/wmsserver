@@ -13,6 +13,10 @@ func InsertUser(c *gin.Context)(string){
 	jsonData, _ := c.GetRawData()
 	return models.Insert(string(jsonData))
 }
+func UpdateUser(c *gin.Context)(string){
+	jsonData, _ := c.GetRawData()
+	return models.Update(string(jsonData))
+}
 func Login(c *gin.Context)(string){
 	jsonData, _ := c.GetRawData()
 	return models.Find(string(jsonData))

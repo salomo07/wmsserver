@@ -17,5 +17,9 @@ func AuthRouter(r *gin.Engine) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.InsertUser(c))
 		})
+		master.POST("/updateuser", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.UpdateUser(c))
+		})
 	}
 }
