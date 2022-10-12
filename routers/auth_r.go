@@ -21,5 +21,9 @@ func AuthRouter(r *gin.Engine) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.UpdateUser(c))
 		})
+		master.POST("/deleteuser", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.DeleteUser(c))
+		})
 	}
 }

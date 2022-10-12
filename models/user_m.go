@@ -17,13 +17,19 @@ func Insert(strquery string)(string){
 }
 func Update(strquery string)(string){
 	var objt UpdateObjt
-	
 	err:=json.Unmarshal([]byte(strquery),&objt)
+	log.Println(err)
 	if objt.Rev == "" || objt.Id==""{
 		return `{"error":"bad request","reason":"_id & _rev fields must include"}`
 	}
 	return config.Request("PUT","wms/"+objt.Id,strquery)
 }
 func Delete(strquery string)(string){
-	return config.Request("DELETE","wms",strquery)
+	var objt UpdateObjt
+	err:=json.Unmarshal([]byte(strquery),&objt)
+	log.Println("XXXXXXXX",err)
+	if objt.Rev == "" || objt.Id==""{
+		return `{"error":"bad request","reason":"_id & _rev fields must include"}`
+	}
+	return config.Request("DELETE","wms/"+objt.Id+"?rev="+objt.Rev,strquery)
 }

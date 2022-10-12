@@ -17,6 +17,10 @@ func UpdateUser(c *gin.Context)(string){
 	jsonData, _ := c.GetRawData()
 	return models.Update(string(jsonData))
 }
+func DeleteUser(c *gin.Context)(string){
+	jsonData, _ := c.GetRawData()
+	return models.Delete(string(jsonData))
+}
 func Login(c *gin.Context)(string){
 	jsonData, _ := c.GetRawData()
 	return models.Find(string(jsonData))
