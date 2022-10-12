@@ -6,24 +6,24 @@ import (
 	"wms/models"
 )
 func FindUser(c *gin.Context)(string){
+	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()
-	return models.Find(string(jsonData))
+	return models.Find(db,string(jsonData))
 }
 func InsertUser(c *gin.Context)(string){
+	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()
-	return models.Insert(string(jsonData))
+	return models.Insert(db,string(jsonData))
 }
 func UpdateUser(c *gin.Context)(string){
+	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()
-	return models.Update(string(jsonData))
+	return models.Update(db,string(jsonData))
 }
 func DeleteUser(c *gin.Context)(string){
+	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()
-	return models.Delete(string(jsonData))
-}
-func Login(c *gin.Context)(string){
-	jsonData, _ := c.GetRawData()
-	return models.Find(string(jsonData))
+	return models.Delete(db,string(jsonData))
 }
 func GetMD5Hash(text string) string {
    hash := md5.Sum([]byte(text))

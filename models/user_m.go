@@ -9,27 +9,27 @@ type UpdateObjt struct {
 	Id string `json:"_id"`
 	Rev string `json:"_rev"`
 }
-func Find(strquery string)(string){
-	return config.Request("POST","wms/_find",strquery)
+func Find(db string,strquery string)(string){
+	return config.Request("POST",db+"/_find",strquery)
 }
-func Insert(strquery string)(string){
-	return config.Request("POST","wms",strquery)
+func Insert(db string,strquery string)(string){
+	return config.Request("POST",db,strquery)
 }
-func Update(strquery string)(string){
+func Update(db string,strquery string)(string){
 	var objt UpdateObjt
 	err:=json.Unmarshal([]byte(strquery),&objt)
 	log.Println(err)
 	if objt.Rev == "" || objt.Id==""{
 		return `{"error":"bad request","reason":"_id & _rev fields must include"}`
 	}
-	return config.Request("PUT","wms/"+objt.Id,strquery)
+	return config.Request("PUT",db+"/"+objt.Id,strquery)
 }
-func Delete(strquery string)(string){
+func Delete(db string,strquery string)(string){
 	var objt UpdateObjt
 	err:=json.Unmarshal([]byte(strquery),&objt)
 	log.Println("XXXXXXXX",err)
 	if objt.Rev == "" || objt.Id==""{
 		return `{"error":"bad request","reason":"_id & _rev fields must include"}`
 	}
-	return config.Request("DELETE","wms/"+objt.Id+"?rev="+objt.Rev,strquery)
+	return config.Request("DELETE",db+"/"+objt.Id+"?rev="+objt.Rev,strquery)
 }
