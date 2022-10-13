@@ -7,7 +7,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	routers.AuthRouter(r)
+	routers.CouchDBRouter(r)
 
 	// port := os.Getenv("PORT")
 	r.Run(":7777")

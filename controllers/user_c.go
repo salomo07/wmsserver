@@ -5,25 +5,20 @@ import (
 	"github.com/gin-gonic/gin"	
 	"wms/models"
 )
-func FindUser(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
-	return models.Find(db,string(jsonData))
+func Find(c *gin.Context)(string){
+	return models.Find(c)
 }
-func InsertUser(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
-	return models.Insert(db,string(jsonData))
+func Insert(c *gin.Context)(string){
+	return models.Insert(c)
 }
-func UpdateUser(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
-	return models.Update(db,string(jsonData))
+func Update(c *gin.Context)(string){
+	return models.Update(c)
 }
-func DeleteUser(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
-	return models.Delete(db,string(jsonData))
+func Delete(c *gin.Context)(string){
+	return models.Delete(c)
+}
+func CreateDatabase(c *gin.Context)(string){
+	return models.CreateDatabase(c)
 }
 func GetMD5Hash(text string) string {
    hash := md5.Sum([]byte(text))

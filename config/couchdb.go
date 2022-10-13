@@ -10,6 +10,24 @@ import(
 )
 var DB_STR_CON string 
 
+func Find(path string,strquery string)(string){
+	return Request("POST",path+"/_find",strquery)
+}
+func Insert(path string,strquery string)(string){
+	return Request("POST",path,strquery)
+}
+func Update(path string,strquery string)(string){
+	return Request("PUT",path,strquery)
+}
+func Delete(path string)(string){
+	return Request("DELETE",path,"")
+}
+func CreateDatabase(path string)(string){
+	return Request("PUT",path,"")
+}
+func DeleteDatabase(path string)(string){
+	return Request("DELETE",path,"")
+}
 func Request(method string,pathURL string,strquery string)(string){
 	er := godotenv.Load()
 	if er !=nil{

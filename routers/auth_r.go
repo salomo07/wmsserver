@@ -4,26 +4,30 @@ import (
 	"wms/controllers"
 )
 
-func AuthRouter(r *gin.Engine) {	
+func CouchDBRouter(r *gin.Engine) {	
 	r.Static("assets/", "./assets")
 	
-	master := r.Group("/auth")
+	master := r.Group("/couch")
 	{
-		master.POST("/getuser", func(c *gin.Context) {
+		master.POST("/getdoc", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
-			c.String(200,controllers.FindUser(c))
+			c.String(200,controllers.Find(c))
 		})
-		master.POST("/insertuser", func(c *gin.Context) {
+		master.POST("/insertdoc", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
-			c.String(200,controllers.InsertUser(c))
+			c.String(200,controllers.Insert(c))
 		})
-		master.POST("/updateuser", func(c *gin.Context) {
+		master.POST("/updatedoc", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
-			c.String(200,controllers.UpdateUser(c))
+			c.String(200,controllers.Update(c))
 		})
-		master.POST("/deleteuser", func(c *gin.Context) {
+		master.POST("/deletedoc", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
-			c.String(200,controllers.DeleteUser(c))
+			c.String(200,controllers.Delete(c))
+		})
+		master.POST("/createdb", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.CreateDatabase(c))
 		})
 	}
 }
