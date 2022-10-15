@@ -10,23 +10,26 @@ import(
 )
 var DB_STR_CON string 
 
-func Find(path string,strquery string)(string){
+func FindDoc(path string,strquery string)(string){
 	return Request("POST",path+"/_find",strquery)
 }
-func Insert(path string,strquery string)(string){
+func InsertDoc(path string,strquery string)(string){
 	return Request("POST",path,strquery)
 }
-func Update(path string,strquery string)(string){
+func UpdateDoc(path string,strquery string)(string){
 	return Request("PUT",path,strquery)
 }
-func Delete(path string)(string){
+func DeleteDoc(path string)(string){
 	return Request("DELETE",path,"")
 }
-func CreateDatabase(path string)(string){
-	return Request("PUT",path,"")
+func CreateDatabase(db string)(string){
+	return Request("PUT",db,"")
 }
-func DeleteDatabase(path string)(string){
-	return Request("DELETE",path,"")
+func DeleteDatabase(db string)(string){
+	return Request("DELETE",db,"")
+}
+func GetDataByView(db string,dsgname string,viewname string,str string)(string){
+	return Request("POST",db+"/_design/"+dsgname+"/_view/"+viewname,str)
 }
 func Request(method string,pathURL string,strquery string)(string){
 	er := godotenv.Load()

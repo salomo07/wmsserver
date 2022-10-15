@@ -1,6 +1,5 @@
 package models
 import (
-	"log"
 	"wms/config"
 	"github.com/gin-gonic/gin"
 	"encoding/json"
@@ -13,12 +12,12 @@ type UpdateObjt struct {
 func Find(c *gin.Context)(string){
 	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()
-	return config.Find(db+"/_find",string(jsonData))
+	return config.FindDoc(db+"/_find",string(jsonData))
 }
 func Insert(c *gin.Context)(string){
 	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()
-	return config.Insert(db,string(jsonData))
+	return config.InsertDoc(db,string(jsonData))
 }
 func Update(c *gin.Context)(string){
 	db:=c.Query("db")
@@ -29,7 +28,7 @@ func Update(c *gin.Context)(string){
 	if err != nil{
 		return `{"error":"`+err.Error()+`"}`
 	}
-	return config.Update(db+"/"+objt.Id,string(jsonData))
+	return config.UpdateDoc(db+"/"+objt.Id,string(jsonData))
 }
 func Delete(c *gin.Context)(string){
 	db:=c.Query("db")
@@ -37,11 +36,10 @@ func Delete(c *gin.Context)(string){
 	var objt UpdateObjt
 	
 	err:=json.Unmarshal([]byte(string(jsonData)),&objt)
-	log.Println(err,db+"/"+objt.Id+"?rev="+objt.Rev)
 	if err != nil{
 		return `{"error":"`+err.Error()+`"}`
 	}
-	return config.Delete(db+"/"+objt.Id+"?rev="+objt.Rev)
+	return config.DeleteDoc(db+"/"+objt.Id+"?rev="+objt.Rev)
 }
 func CreateDatabase(c *gin.Context)(string){
 	db:=c.Query("db")
@@ -50,4 +48,15 @@ func CreateDatabase(c *gin.Context)(string){
 func DeleteDatabase(c *gin.Context)(string){
 	db:=c.Query("db")
 	return config.DeleteDatabase(db)
+}
+func GetView(c *gin.Context)(string){
+	jsonData, _ := c.GetRawData() 
+	db:=c.Query("db")
+	ddoc:=c.Query("ddoc")
+	view:=c.Query("view")
+	if db=="" || ddoc=="" || view==""{
+		return `{"error":"db, ddoc, view parameters must included"}`
+	}else{
+		return config.GetDataByView(db,ddoc,view,string(jsonData))
+	}
 }

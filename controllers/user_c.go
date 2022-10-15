@@ -1,11 +1,14 @@
 package controllers
 import (
+	"log"
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"	
 	"wms/models"
 )
 func Find(c *gin.Context)(string){
+	
+	log.Println(GetMD5Hash("321"))
 	return models.Find(c)
 }
 func Insert(c *gin.Context)(string){
@@ -19,6 +22,9 @@ func Delete(c *gin.Context)(string){
 }
 func CreateDatabase(c *gin.Context)(string){
 	return models.CreateDatabase(c)
+}
+func GetView(c *gin.Context)(string){
+	return models.GetView(c)
 }
 func GetMD5Hash(text string) string {
    hash := md5.Sum([]byte(text))

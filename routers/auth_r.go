@@ -29,5 +29,9 @@ func CouchDBRouter(r *gin.Engine) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.CreateDatabase(c))
 		})
+		master.POST("/getview", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.GetView(c))
+		})
 	}
 }
