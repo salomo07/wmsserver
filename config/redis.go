@@ -15,7 +15,7 @@ func connect (){
 	if er !=nil{
 		panic("Fail to load .env file")
 	}
-	REDIS_HOST:=os.Getenv("REDIS_HOST")
+	REDIS_HOST:=os.Getenv("REDIS_HOST_LOCAL")
 	REDIS_PASS:=os.Getenv("REDIS_PASS")
 	REDIS_PORT:=os.Getenv("REDIS_PORT")
 	opt, _ := redis.ParseURL("rediss://:"+REDIS_PASS+"@"+REDIS_HOST+":"+REDIS_PORT)
