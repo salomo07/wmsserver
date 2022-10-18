@@ -43,6 +43,7 @@ func Request(method string,pathURL string,strquery string)(string){
 
 	if err != nil {
 		log.Println(err," xxx")
+		return string(`{"error":`+err.Error()+`}`)
 		panic(err)
 	}
 	req.Header.Add("Content-Type", "application/json")
@@ -50,6 +51,7 @@ func Request(method string,pathURL string,strquery string)(string){
 	res, err := client.Do(req)
 	if err != nil {
 		log.Println(err," yyy")
+		return string(`{"error":`+err.Error()+`}`)
 		panic(err)
 	}
 	defer res.Body.Close()
@@ -57,6 +59,7 @@ func Request(method string,pathURL string,strquery string)(string){
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Println(err," zzz")
+		return string(`{"error":`+err.Error()+`}`)
 		panic(err)
 	}
 	return string(body)

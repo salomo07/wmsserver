@@ -9,6 +9,7 @@ type UpdateObjt struct {
 	Id string  `json:"_id"`
 	Rev string `json:"_rev"`
 }
+
 func Find(c *gin.Context)(string){
 	db:=c.Query("db")
 	jsonData, _ := c.GetRawData()

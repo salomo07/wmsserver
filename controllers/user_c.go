@@ -1,18 +1,31 @@
 package controllers
 import (
 	"log"
+	"time"
+	"strings"
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"	
 	"wms/models"
+	"wms/config"
 )
 func Find(c *gin.Context)(string){
-	
-	log.Println(GetMD5Hash("321"))
-	return models.Find(c)
+	currentTime := time.Now().Format("2006-01-02")
+	now,_:=time.Parse("2006-01-02", currentTime)
+	log.Println(now.Unix())
+	var rst =config.CheckSession(c)
+	if !strings.Contains(rst, "error") {
+		rst=models.Find(c)
+	}
+	return rst
 }
 func Insert(c *gin.Context)(string){
-	return models.Insert(c)
+	config.SetData("session-01a7d17fac6bae63fa5c69b76e019862",`{
+	  "expired": 1666051200,
+	  "user": "202cb962ac59075b964b07152d234b70"
+	}`)
+	return ""
+	// models.Insert(c)
 }
 func Update(c *gin.Context)(string){
 	return models.Update(c)

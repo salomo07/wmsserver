@@ -1,0 +1,12 @@
+{
+  "apikey": "NFB7y87chCfIs5rJTz4Pfh88DpNUdcNmbeMwhPqnk4Op",
+  "host": "780f9a48-f1ab-4440-ac2b-37ea81139aef-bluemix.cloudantnosqldb.appdomain.cloud",
+  "iam_apikey_description": "Auto-generated for key crn:v1:bluemix:public:cloudantnosqldb:au-syd:a/51af857c17e24e528364a3a3b6bf6f08:eb6dfb0e-0b0d-4352-9c1b-22c6637fad21:resource-key:718a07f2-bf5c-411c-8404-f95b2cb80bed",
+  "iam_apikey_name": "Cred1",
+  "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Manager",
+  "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/51af857c17e24e528364a3a3b6bf6f08::serviceid:ServiceId-41b0351f-34bf-4cbf-9f51-5737abc07d22",
+  "password": "c513b611a28773ccf6b3259f9094c47b",
+  "port": 443,
+  "url": "https://apikey-v2-33vx8fe9vgdpo92uds4g6xnoafejo5ua9yhfvulyif0t:c513b611a28773ccf6b3259f9094c47b@780f9a48-f1ab-4440-ac2b-37ea81139aef-bluemix.cloudantnosqldb.appdomain.cloud",
+  "username": "apikey-v2-33vx8fe9vgdpo92uds4g6xnoafejo5ua9yhfvulyif0t"
+}
