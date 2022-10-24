@@ -2,7 +2,6 @@ package controllers
 import (
 	"log"
 	"time"
-	"strings"
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"	
@@ -13,10 +12,10 @@ func Find(c *gin.Context)(string){
 	currentTime := time.Now().Format("2006-01-02")
 	now,_:=time.Parse("2006-01-02", currentTime)
 	log.Println(now.Unix())
-	var rst =config.CheckSession(c)
-	if !strings.Contains(rst, "error") {
+	var rst,err =config.CheckSession(c)
+	if err =="" {
 		rst=models.Find(c)
-	}
+	}else{rst=err}
 	return rst
 }
 func Insert(c *gin.Context)(string){

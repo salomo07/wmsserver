@@ -28,15 +28,15 @@ type CookieReq struct {
 	User UserStruct `json:"user"`
 	Expired int64 `json:"expired"`
 }
-func CheckSession(c *gin.Context)string{
-	var rst =""
+func CheckSession(c *gin.Context)(string,string){
+	// var rst =""
 	tokenIn,_:=c.Cookie("token")
 	if tokenIn ==""{
-		rst =string(`{"error":"Cookie is not found"}`)
+		return "",string(`{"error":"Cookie is not found"}`)
 	}else {
 		dataSession:=GetData(tokenIn)
 		if dataSession==""{
-			rst =string(`{"error":"Session not found"}`)
+			return "",string(`{"error":"Session not found"}`)
 		}else{
 			var objt CookieReq
 			json.Unmarshal([]byte(dataSession),&objt)
@@ -52,11 +52,9 @@ func CheckSession(c *gin.Context)string{
 			// }
 			log.Println("xxxxxxxxx")
 			xxx,_:=json.Marshal(CookieReq{})
-			rst = string(xxx)
+			return string(xxx),""
 		}
-		
 	}
-	return rst
 }
 func SetData (key string,data string){
 	er := godotenv.Load()
