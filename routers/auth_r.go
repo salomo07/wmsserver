@@ -25,13 +25,30 @@ func CouchDBRouter(r *gin.Engine) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.Delete(c))
 		})
+		master.POST("/bulkdocs", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.BulkDocs(c))
+		})
 		master.POST("/createdb", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.CreateDatabase(c))
 		})
+		master.POST("/deletedb", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.DeleteDatabase(c))
+		})
+		master.POST("/createuserdb", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.CreateUserDB(c))
+		})
+		
 		master.POST("/getview", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.GetView(c))
+		})
+		master.POST("/registercompany", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.RegisterCompany(c))
 		})
 	}
 }

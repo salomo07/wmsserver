@@ -10,8 +10,11 @@ import(
 )
 var DB_STR_CON string 
 
-func FindDoc(path string,strquery string)(string){
-	return Request("POST",path+"/_find",strquery)
+func BulkDocs(db string,strquery string)(string){
+	return Request("POST",db+"/_bulk_docs",strquery)
+}
+func FindDoc(db string,strquery string)(string){
+	return Request("POST",db+"/_find",strquery)
 }
 func InsertDoc(path string,strquery string)(string){
 	return Request("POST",path,strquery)
@@ -27,6 +30,9 @@ func CreateDatabase(db string)(string){
 }
 func DeleteDatabase(db string)(string){
 	return Request("DELETE",db,"")
+}
+func CreateUserDB(username string,strquery string)(string){
+	return Request("PUT","_users/org.couchdb.user:"+username,strquery)
 }
 func GetDataByView(db string,dsgname string,viewname string,str string)(string){
 	return Request("POST",db+"/_design/"+dsgname+"/_view/"+viewname,str)

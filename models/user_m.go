@@ -9,6 +9,10 @@ type UpdateObjt struct {
 	Id string  `json:"_id"`
 	Rev string `json:"_rev"`
 }
+type UserDBObjt struct {
+	Name string  `json:"name"`
+	Password string `json:"password"`
+}
 
 func Find(c *gin.Context)(string){
 	db:=c.Query("db")
@@ -42,8 +46,7 @@ func Delete(c *gin.Context)(string){
 	}
 	return config.DeleteDoc(db+"/"+objt.Id+"?rev="+objt.Rev)
 }
-func CreateDatabase(c *gin.Context)(string){
-	db:=c.Query("db")
+func CreateDatabase(db string)(string){
 	return config.CreateDatabase(db)
 }
 func DeleteDatabase(c *gin.Context)(string){
@@ -60,4 +63,18 @@ func GetView(c *gin.Context)(string){
 	}else{
 		return config.GetDataByView(db,ddoc,view,string(jsonData))
 	}
+}
+func BulkDocs(c *gin.Context)(string){
+	db:=c.Query("db")
+	jsonData, _ := c.GetRawData()
+	return config.BulkDocs(db,string(jsonData))
+}
+func CreateUserDB(c *gin.Context)(string){
+	jsonData, _ := c.GetRawData()
+	var objt UserDBObjt
+	err:=json.Unmarshal([]byte(string(jsonData)),&objt)
+	if err != nil{
+		return `{"error":"`+err.Error()+`"}`
+	}
+	return config.CreateUserDB(objt.Name,string(jsonData))
 }

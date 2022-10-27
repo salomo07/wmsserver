@@ -1,5 +1,6 @@
 package controllers
 import (
+	"encoding/json"
 	"log"
 	"time"
 	"crypto/md5"
@@ -8,6 +9,24 @@ import (
 	"wms/models"
 	"wms/config"
 )
+type CompanyObjt struct {
+	Id string  `json:"id"`
+	Ok bool  `json:"ok"`
+}
+func RegisterCompany(c *gin.Context)(string){
+	companyData:=Insert(c)
+	log.Println(companyData)
+	var objt CompanyObjt
+	err:=json.Unmarshal([]byte(string(companyData)),&objt)
+	if err != nil{
+		return `{"error":"`+err.Error()+`"}`
+	}
+	if objt.Ok {
+		idCompany:=objt.Id
+		log.Println(models.CreateDatabase("company_"+idCompany))
+	}
+	return companyData
+}
 func Find(c *gin.Context)(string){
 	currentTime := time.Now().Format("2006-01-02")
 	now,_:=time.Parse("2006-01-02", currentTime)
@@ -19,12 +38,7 @@ func Find(c *gin.Context)(string){
 	return rst
 }
 func Insert(c *gin.Context)(string){
-	config.SetData("session-01a7d17fac6bae63fa5c69b76e019862",`{
-	  "expired": 1666051200,
-	  "user": "202cb962ac59075b964b07152d234b70"
-	}`)
-	return ""
-	// models.Insert(c)
+	return models.Insert(c)
 }
 func Update(c *gin.Context)(string){
 	return models.Update(c)
@@ -33,10 +47,20 @@ func Delete(c *gin.Context)(string){
 	return models.Delete(c)
 }
 func CreateDatabase(c *gin.Context)(string){
-	return models.CreateDatabase(c)
+	db:=c.Query("db")
+	return models.CreateDatabase(db)
+}
+func DeleteDatabase(c *gin.Context)(string){
+	return models.DeleteDatabase(c)
+}
+func CreateUserDB(c *gin.Context)(string){
+	return models.CreateUserDB(c)
 }
 func GetView(c *gin.Context)(string){
 	return models.GetView(c)
+}
+func BulkDocs(c *gin.Context)(string){
+	return models.BulkDocs(c)
 }
 func GetMD5Hash(text string) string {
    hash := md5.Sum([]byte(text))
