@@ -1,6 +1,6 @@
 package controllers
 import (
-	"encoding/json"
+	// "encoding/json"
 	"log"
 	"time"
 	"crypto/md5"
@@ -14,18 +14,20 @@ type CompanyObjt struct {
 	Ok bool  `json:"ok"`
 }
 func RegisterCompany(c *gin.Context)(string){
+	log.Println("ssss")
 	companyData:=Insert(c)
 	log.Println(companyData)
-	var objt CompanyObjt
-	err:=json.Unmarshal([]byte(string(companyData)),&objt)
-	if err != nil{
-		return `{"error":"`+err.Error()+`"}`
-	}
-	if objt.Ok {
-		idCompany:=objt.Id
-		log.Println(models.CreateDatabase("company_"+idCompany))
-	}
-	return companyData
+	// var objt CompanyObjt
+	// err:=json.Unmarshal([]byte(string(companyData)),&objt)
+	// if err != nil{
+	// 	return `{"error":"`+err.Error()+`"}`
+	// }
+	// if objt.Ok {
+	// 	idCompany:=objt.Id
+	// 	log.Println("company_"+idCompany)
+	// 	// log.Println(models.CreateDatabase("company_"+idCompany))
+	// }
+	return ""
 }
 func Find(c *gin.Context)(string){
 	currentTime := time.Now().Format("2006-01-02")

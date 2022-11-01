@@ -78,3 +78,7 @@ func CreateUserDB(c *gin.Context)(string){
 	}
 	return config.CreateUserDB(objt.Name,string(jsonData))
 }
+func CreateReplication(c *gin.Context)(string){
+	jsonData, _ := c.GetRawData()
+	return config.CreateReplication(string(jsonData))
+}

@@ -34,6 +34,9 @@ func DeleteDatabase(db string)(string){
 func CreateUserDB(username string,strquery string)(string){
 	return Request("PUT","_users/org.couchdb.user:"+username,strquery)
 }
+func CreateReplication(strquery string)(string){
+	return Request("POST","_replicate",strquery)
+}
 func GetDataByView(db string,dsgname string,viewname string,str string)(string){
 	return Request("POST",db+"/_design/"+dsgname+"/_view/"+viewname,str)
 }
