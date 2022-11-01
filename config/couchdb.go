@@ -17,6 +17,7 @@ func FindDoc(db string,strquery string)(string){
 	return Request("POST",db+"/_find",strquery)
 }
 func InsertDoc(path string,strquery string)(string){
+	log.Println("insertdoc")
 	return Request("POST",path,strquery)
 }
 func UpdateDoc(path string,strquery string)(string){
@@ -48,20 +49,20 @@ func Request(method string,pathURL string,strquery string)(string){
 	DB_STR_CON=os.Getenv("DB_STR_CON")
 	payload := strings.NewReader(strquery)
 	client := &http.Client {}
-	req, err := http.NewRequest(method, DB_STR_CON+pathURL, payload)
+	req, errCon := http.NewRequest(method, DB_STR_CON+pathURL, payload)
 
-	if err != nil {
-		log.Println(err," xxx")
-		return string(`{"error":`+err.Error()+`}`)
-		panic(err)
+	if errCon != nil {
+		log.Println(errCon," xxx")
+		return string(`{"error":`+errCon.Error()+`}`)
+		panic(errCon)
 	}
 	req.Header.Add("Content-Type", "application/json")
 
-	res, err := client.Do(req)
-	if err != nil {
-		log.Println(err," yyy")
-		return string(`{"error":`+err.Error()+`}`)
-		panic(err)
+	res, errDo := client.Do(req)
+	if errDo != nil {
+		log.Println(errDo," yyy")
+		return string(`{"error":`+errDo.Error()+`}`)
+		panic(errDo)
 	}
 	defer res.Body.Close()
 

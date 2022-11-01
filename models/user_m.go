@@ -20,7 +20,13 @@ func Find(c *gin.Context)(string){
 	return config.FindDoc(db+"/_find",string(jsonData))
 }
 func Insert(c *gin.Context)(string){
-	db:=c.Query("db")
+	db:=""
+	if c.Query("db")==""{
+		db="mastercompany"
+	}else{
+		db=c.Query("db")
+	}
+	
 	jsonData, _ := c.GetRawData()
 	return config.InsertDoc(db,string(jsonData))
 }
