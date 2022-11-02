@@ -14,26 +14,14 @@ type UserDBObjt struct {
 	Password string `json:"password"`
 }
 
-func Find(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
+func Find(db string,jsonData []byte)(string){
 	return config.FindDoc(db+"/_find",string(jsonData))
 }
-func Insert(c *gin.Context)(string){
-	db:=""
-	if c.Query("db")==""{
-		db="mastercompany"
-	}else{
-		db=c.Query("db")
-	}
-	
-	jsonData, _ := c.GetRawData()
+func Insert(db string,jsonData []byte)(string){
 	return config.InsertDoc(db,string(jsonData))
 }
-func Update(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
-
+func Update(db string,jsonData []byte)(string){
+	
 	var objt UpdateObjt
 	err:=json.Unmarshal([]byte(string(jsonData)),&objt)
 	if err != nil{
@@ -70,9 +58,7 @@ func GetView(c *gin.Context)(string){
 		return config.GetDataByView(db,ddoc,view,string(jsonData))
 	}
 }
-func BulkDocs(c *gin.Context)(string){
-	db:=c.Query("db")
-	jsonData, _ := c.GetRawData()
+func BulkDocs(db string,jsonData []byte)(string){
 	return config.BulkDocs(db,string(jsonData))
 }
 func CreateUserDB(c *gin.Context)(string){
