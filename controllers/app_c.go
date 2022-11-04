@@ -14,7 +14,7 @@ type CompanyObjt struct {
 	Ok bool  `json:"ok"`
 }
 func RegisterCompany(c *gin.Context)(string){
-	companyData:=models.Insert(c)
+	companyData:=Insert(c)
 	var objt CompanyObjt
 	err:=json.Unmarshal([]byte(string(companyData)),&objt)
 	idCompany:=""
@@ -27,8 +27,8 @@ func RegisterCompany(c *gin.Context)(string){
 	}
 	return ""
 }
-func InitializingData(c *gin.Context){
-	BulkDocs(c)
+func InitializingData(idCompany string){
+	models.BulkDocs("c"+idCompany,jsonData)
 }
 func CreateDBCompany(idCompany string)(string){
 	return models.CreateDatabase("c_"+idCompany)
@@ -46,36 +46,52 @@ func Find(c *gin.Context)(string){
 	return rst
 }
 func Insert(c *gin.Context)(string){
-	db:=""
-	if c.Query("db")==""{
-		db="mastercompany"
-	}else{
-		db=c.Query("db")
+	db:=c.Query("db")
+	if db==""{
+		return `{"error":"Please insert db variable"}`
 	}
-	
 	jsonData, _ := c.GetRawData()
-	return models.Insert(c)
+	return models.Insert(c.Query("db"),jsonData)
 }
 func Update(c *gin.Context)(string){
 	db:=c.Query("db")
+	if db==""{
+		return `{"error":"Please insert db variable"}`
+	}
 	jsonData, _ := c.GetRawData()
-	return models.Update(c)
+	return models.Update(db,jsonData)
 }
 func Delete(c *gin.Context)(string){
 	return models.Delete(c)
 }
 func CreateDatabase(c *gin.Context)(string){
 	db:=c.Query("db")
+	if db==""{
+		return `{"error":"Please insert db variable"}`
+	}
 	return models.CreateDatabase(db)
 }
 func DeleteDatabase(c *gin.Context)(string){
-	return models.DeleteDatabase(c)
+	db:=c.Query("db")
+	if db==""{
+		return `{"error":"Please insert db variable"}`
+	}
+	return models.DeleteDatabase(db)
 }
 func CreateUserDB(c *gin.Context)(string){
-	return models.CreateUserDB(c)
+	db:=c.Query("db")
+	if db==""{
+		return `{"error":"Please insert db variable"}`
+	}
+	jsonData, _ := c.GetRawData()
+	return models.CreateUserDB(jsonData)
 }
 func GetView(c *gin.Context)(string){
-	return models.GetView(c)
+	if c.Query("db")=="" || c.Query("ddoc")=="" || c.Query("view")==""{
+		return `{"error":"db, ddoc, view parameters must included"}`
+	}	
+	jsonData, _ := c.GetRawData()
+	return models.GetView(c.Query("db"),c.Query("ddoc"),c.Query("view"),jsonData)
 }
 func BulkDocs(c *gin.Context)(string){
 	db:=c.Query("db")

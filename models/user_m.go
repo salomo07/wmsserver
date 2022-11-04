@@ -21,7 +21,6 @@ func Insert(db string,jsonData []byte)(string){
 	return config.InsertDoc(db,string(jsonData))
 }
 func Update(db string,jsonData []byte)(string){
-	
 	var objt UpdateObjt
 	err:=json.Unmarshal([]byte(string(jsonData)),&objt)
 	if err != nil{
@@ -43,30 +42,23 @@ func Delete(c *gin.Context)(string){
 func CreateDatabase(db string)(string){
 	return config.CreateDatabase(db)
 }
-func DeleteDatabase(c *gin.Context)(string){
-	db:=c.Query("db")
+func DeleteDatabase(db string)(string){
 	return config.DeleteDatabase(db)
 }
-func GetView(c *gin.Context)(string){
-	jsonData, _ := c.GetRawData() 
-	db:=c.Query("db")
-	ddoc:=c.Query("ddoc")
-	view:=c.Query("view")
-	if db=="" || ddoc=="" || view==""{
-		return `{"error":"db, ddoc, view parameters must included"}`
-	}else{
-		return config.GetDataByView(db,ddoc,view,string(jsonData))
-	}
+func GetView(db string,ddoc string,view string, jsonData []byte)(string){ 
+	return config.GetDataByView(db,ddoc,view,string(jsonData))
 }
 func BulkDocs(db string,jsonData []byte)(string){
 	return config.BulkDocs(db,string(jsonData))
 }
-func CreateUserDB(c *gin.Context)(string){
-	jsonData, _ := c.GetRawData()
+func CreateUserDB(jsonData []byte)(string){
 	var objt UserDBObjt
 	err:=json.Unmarshal([]byte(string(jsonData)),&objt)
 	if err != nil{
 		return `{"error":"`+err.Error()+`"}`
+	}
+	if objt.Name=="" || objt.Password==""{
+		return `{"error":"Please insert name & password"}`
 	}
 	return config.CreateUserDB(objt.Name,string(jsonData))
 }
