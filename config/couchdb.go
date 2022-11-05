@@ -17,7 +17,6 @@ func FindDoc(db string,strquery string)(string){
 	return Request("POST",db+"/_find",strquery)
 }
 func InsertDoc(path string,strquery string)(string){
-	log.Println("insertdoc")
 	return Request("POST",path,strquery)
 }
 func UpdateDoc(path string,strquery string)(string){

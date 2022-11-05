@@ -50,32 +50,36 @@ func CheckSession(c *gin.Context)(string,string){
 			// }else{
 			// 	return true
 			// }
-			log.Println("xxxxxxxxx")
 			xxx,_:=json.Marshal(CookieReq{})
 			return string(xxx),""
 		}
 	}
 }
-func SetData (key string,data string){
+func SetData (key string,data string)(string){
 	er := godotenv.Load()
 	if er !=nil{
+		log.Println("Error : Fail to load .env file")
 		panic("Fail to load .env file")
 	}
-	REDIS_STRING:=os.Getenv("REDIS_STRING_LOCAL")
-	opt, _ := redis.ParseURL(REDIS_STRING)
-  	client := redis.NewClient(opt)
-  	client.Set(ctx, key, data,0)
-  	log.Println(key," saved")
+	REDIS_HOST_LOCAL:=os.Getenv("REDIS_HOST_LOCAL")
+  	rdb := redis.NewClient(&redis.Options{Addr:REDIS_HOST_LOCAL,Password:"passredis",DB:0})
+  	err := rdb.Set(ctx, key, data, 0).Err()
+    if err != nil {
+    	return `{"error":`+err.Error()+`}`
+    }
+    return `{"ok":true}`
 }
-func GetData (key string)string{
+func GetData (key string)(string){
 	er := godotenv.Load()
 	if er !=nil{
+		log.Println("Error : Fail to load .env file")
 		panic("Fail to load .env file")
 	}
-	REDIS_STRING:=os.Getenv("REDIS_STRING_LOCAL")
-	opt, _ := redis.ParseURL(REDIS_STRING)
-  	client := redis.NewClient(opt)
-  	val := client.Get(ctx, key).Val()
-  	log.Println(val)
-  	return val
+	REDIS_HOST_LOCAL:=os.Getenv("REDIS_HOST_LOCAL")
+	rdb := redis.NewClient(&redis.Options{Addr:REDIS_HOST_LOCAL,Password:"passredis",DB:0})
+  	val, err := rdb.Get(ctx, key).Result()
+    if err != nil {
+    	return `{"error":`+err.Error()+`}`
+    }
+    return val
 }

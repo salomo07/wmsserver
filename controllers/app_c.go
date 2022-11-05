@@ -1,6 +1,7 @@
 package controllers
 import (
 	"encoding/json"
+	"strconv"
 	"log"
 	"time"
 	"crypto/md5"
@@ -13,30 +14,56 @@ type CompanyObjt struct {
 	Id string  `json:"id"`
 	Ok bool  `json:"ok"`
 }
+type SetObjt struct {
+	Data string  `json:"data"`
+}
 func RegisterCompany(c *gin.Context)(string){
-	companyData:=Insert(c)
+	jsonData, _ := c.GetRawData()
+	companyData:=models.Insert("mastercompany",jsonData)
+	
 	var objt CompanyObjt
 	err:=json.Unmarshal([]byte(string(companyData)),&objt)
+	
 	idCompany:=""
 	if err != nil{
-		return `{"errorx":"`+err.Error()+`"}`
+		log.Println(`{"error":"`+err.Error()+`"}`)
+		return `{"error":"`+err.Error()+`"}`
 	}
+
 	if objt.Ok {
 		idCompany=objt.Id
 		CreateDBCompany(idCompany)
+		currentTime := time.Now().Format("2006-01-02")
+		now,_:=time.Parse("2006-01-02", currentTime)
+		ss := strconv.FormatInt(now.Unix(), 10)
+		log.Println("admin"+string(idCompany))
+		config.SetData("admin"+string(idCompany),ss)
+		config.SetData("member"+string(idCompany),ss+"m")
+		log.Println("admin"+string(idCompany),ss)
+		log.Println("admin"+string(idCompany),ss+"m")
 	}
 	return ""
 }
+func SetRedis(c *gin.Context)(string){
+	jsonData, _ := c.GetRawData()
+	var objt SetObjt
+	err:=json.Unmarshal([]byte(string(jsonData)),&objt)
+	if err ==nil{
+		return models.SetRedis(c.Query("key"),objt.Data)
+	}
+	return `{"error":`+err.Error()+`}`
+}
+func GetRedis(c *gin.Context)(string){
+	return models.GetRedis(c.Query("key"))
+}
 func InitializingData(idCompany string){
-	models.BulkDocs("c"+idCompany,jsonData)
+	// masterwarehouse:=`{"name":"Gudang A","code":"GA","stokmin":3000,"stokmax":10000}`
+	// models.BulkDocs("c"+idCompany,jsonData)
 }
 func CreateDBCompany(idCompany string)(string){
 	return models.CreateDatabase("c_"+idCompany)
 }
 func Find(c *gin.Context)(string){
-	currentTime := time.Now().Format("2006-01-02")
-	now,_:=time.Parse("2006-01-02", currentTime)
-	log.Println(now.Unix())
 	var rst,err =config.CheckSession(c)
 	if err =="" {		
 		db:=c.Query("db")

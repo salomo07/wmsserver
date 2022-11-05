@@ -10,8 +10,8 @@ type GudangObjt struct {
 	Rev string `json:"_rev"` //required
 	Name string `json:"name"`
 	Code string `json:"code"`
-	StockMin number `json:"stockmin"`
-	StockMax number `json:"stockmax"`
+	StockMin float32 `json:"stockmin"`
+	StockMax float32 `json:"stockmax"`
 	Layout string `json:"layout"`
 	Detail []DetailGudangObjt `json:"details"`
 	Table string `json:"table"`

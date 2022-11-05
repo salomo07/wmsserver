@@ -66,3 +66,9 @@ func CreateReplication(c *gin.Context)(string){
 	jsonData, _ := c.GetRawData()
 	return config.CreateReplication(string(jsonData))
 }
+func SetRedis(key string,val string)(string){
+	return config.SetData (key,val)
+}
+func GetRedis(key string)(string){
+	return config.GetData (key)
+}
