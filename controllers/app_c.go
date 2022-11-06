@@ -1,5 +1,6 @@
 package controllers
 import (
+	"strings"
 	"encoding/json"
 	"strconv"
 	"log"
@@ -15,7 +16,7 @@ type CompanyObjt struct {
 	Ok bool  `json:"ok"`
 }
 type SetObjt struct {
-	Data string  `json:"data"`
+	Data string  `json:"data" binding:"required"`
 }
 func RegisterCompany(c *gin.Context)(string){
 	jsonData, _ := c.GetRawData()
@@ -52,6 +53,19 @@ func SetRedis(c *gin.Context)(string){
 		return models.SetRedis(c.Query("key"),objt.Data)
 	}
 	return `{"error":`+err.Error()+`}`
+}
+func CheckSession(c *gin.Context)(string){
+	apikey:=c.GetHeader("Authorization")
+	if apikey==""{
+		return `{"error":"You must have api key"}`
+	}
+	reqToken := apikey
+	
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
+	log.Println(reqToken,len(splitToken),"dfdfdfdf")
+	
+	return reqToken
 }
 func GetRedis(c *gin.Context)(string){
 	return models.GetRedis(c.Query("key"))

@@ -58,5 +58,9 @@ func CouchDBRouter(r *gin.Engine) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200,controllers.GetRedis(c))
 		})
+		master.POST("/checksession", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200,controllers.CheckSession(c))
+		})
 	}
 }
