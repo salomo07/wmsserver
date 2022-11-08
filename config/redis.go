@@ -30,12 +30,8 @@ type CookieReq struct {
 }
 var REDIS_SERVER=""
 func init(){
-    er := godotenv.Load()
-    if er !=nil{
-        log.Println("Error : Fail to load .env file")
-        panic("Fail to load .env file")
-    }
-    REDIS_SERVER=os.Getenv("REDIS_STRING")
+
+//     REDIS_SERVER=os.Getenv("REDIS_STRING")
 }
 func CheckSession(c *gin.Context)(string,string){
 	// var rst =""
@@ -65,6 +61,12 @@ func CheckSession(c *gin.Context)(string,string){
 	}
 }
 func SetData (key string,data string)(string){
+    er := godotenv.Load()
+    if er !=nil{
+        log.Println("Error : Fail to load .env file")
+        panic("Fail to load .env file")
+    }
+    REDIS_SERVER=os.Getenv("REDIS_STRING")
   	rdb := redis.NewClient(&redis.Options{Addr:REDIS_SERVER,Password:"passredis",DB:0})
   	err := rdb.Set(ctx, key, data, 0).Err()
     if err != nil {
@@ -73,6 +75,12 @@ func SetData (key string,data string)(string){
     return `{"ok":true}`
 }
 func GetData (key string)(string){
+    er := godotenv.Load()
+    if er !=nil{
+        log.Println("Error : Fail to load .env file")
+        panic("Fail to load .env file")
+    }
+    REDIS_SERVER=os.Getenv("REDIS_STRING")
 	rdb := redis.NewClient(&redis.Options{Addr:REDIS_SERVER,Password:"passredis",DB:0})
   	val, err := rdb.Get(ctx, key).Result()
     if err != nil {
