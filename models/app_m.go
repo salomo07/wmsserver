@@ -15,6 +15,7 @@ type UpdateObjt struct {
 type UserDBObjt struct {
 	Name     string `json:"name"`
 	Password string `json:"password"`
+	Type string `json:"type"`
 }
 
 func FindDoc(db string, jsonData []byte) string {
@@ -34,9 +35,7 @@ func UpdateDoc(db string, jsonData []byte) string {
 	}
 	return config.UpdateDoc(db+"/"+objt.Id, string(jsonData))
 }
-func DeleteDoc(c *gin.Context) string {
-	db := c.Query("db")
-	jsonData, _ := c.GetRawData()
+func DeleteDoc(db string, jsonData []byte) string {
 	var objt UpdateObjt
 
 	err := json.Unmarshal([]byte(string(jsonData)), &objt)
@@ -69,6 +68,7 @@ func CreateUserDB(jsonData []byte) string {
 	if objt.Name == "" || objt.Password == "" {
 		return `{"error":"Please insert name & password"}`
 	}
+	objt.Type="user"
 	return config.CreateUserDB(objt.Name, string(jsonData))
 }
 func CreateReplication(c *gin.Context) string {
@@ -80,4 +80,7 @@ func SetRedis(key string, val string) string {
 }
 func GetRedis(key string) string {
 	return config.GetData(key)
+}
+func InsertAuthorDB(db string,strquery string)(string){
+	return InsertAuthorDB(db,strquery)
 }

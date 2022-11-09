@@ -29,9 +29,15 @@ type CookieReq struct {
 	Expired int64 `json:"expired"`
 }
 var REDIS_SERVER=""
+var ERROR_LOAD_ENV=""
 func init(){
-
-//     REDIS_SERVER=os.Getenv("REDIS_STRING")
+	er := godotenv.Load()
+    if er !=nil{
+    	ERROR_LOAD_ENV=er.Error()
+        log.Println("Error : Fail to load .env file")
+    }
+    log.Println(".env is loaded")
+    REDIS_SERVER=os.Getenv("REDIS_HOST_LOCAL")
 }
 func CheckSession(c *gin.Context)(string,string){
 	// var rst =""
@@ -61,30 +67,27 @@ func CheckSession(c *gin.Context)(string,string){
 	}
 }
 func SetData (key string,data string)(string){
-    er := godotenv.Load()
-    if er !=nil{
-        log.Println("Error : Fail to load .env file")
-        panic("Fail to load .env file")
+    if ERROR_LOAD_ENV !=""{
+    	return `{"error":"`+ERROR_LOAD_ENV+`"}`
     }
-    REDIS_SERVER=os.Getenv("REDIS_STRING")
+    
   	rdb := redis.NewClient(&redis.Options{Addr:REDIS_SERVER,Password:"passredis",DB:0})
   	err := rdb.Set(ctx, key, data, 0).Err()
     if err != nil {
-    	return `{"error":`+err.Error()+`}`
+    	return `{"error":"`+err.Error()+`"}`
     }
     return `{"ok":true}`
 }
 func GetData (key string)(string){
-    er := godotenv.Load()
-    if er !=nil{
-        log.Println("Error : Fail to load .env file")
-        panic("Fail to load .env file")
+    if ERROR_LOAD_ENV !=""{
+    	return `{"error":"`+ERROR_LOAD_ENV+`"}`
     }
-    REDIS_SERVER=os.Getenv("REDIS_STRING")
 	rdb := redis.NewClient(&redis.Options{Addr:REDIS_SERVER,Password:"passredis",DB:0})
   	val, err := rdb.Get(ctx, key).Result()
     if err != nil {
-    	return `{"error":`+err.Error()+`}`
+    	log.Println("sssss")
+    	
+    	return `{"error":"`+err.Error()+`"}`
     }
     return val
 }
