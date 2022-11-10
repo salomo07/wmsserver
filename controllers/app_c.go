@@ -54,13 +54,14 @@ func RegisterCompany(c *gin.Context) string {
 		currentTime := time.Now().Format("2006-01-02")
 		now, _ := time.Parse("2006-01-02", currentTime)
 		password := strconv.FormatInt(now.Unix(), 10)
-		CreateDBCompany(idCompany)
+		// CreateDBCompany(idCompany)
 
-		authJson := `{"admins": { "names": ["admin` + idCompany + `"]}, "members": { "names": ["jan"]}}`
-		userJson := `{"name": "admin` + idCompany + `", "password": "` + password + `", "roles": ["members","admins"]}`
-		log.Println("Password : " + password)
-		models.CreateUserDB(datauser)
-		models.InsertAuthorDB("c_"+idCompany, authJson)
+		authJson := `{"admins": { "names": ["admin` + idCompany + `"]}}`
+		// userJson := `{"name": "admin` + idCompany + `", "password": "` + password + `", "roles": ["members","admins"],"type":"user"}`
+		log.Println("ID :" + "c_" + idCompany + " Password : " + password)
+		// log.Println(models.CreateUserDB(userJson))
+		log.Println(models.InsertAuthorDB("c_"+idCompany, authJson))
+		// log.Println(models.GetAuthorDB("c_"+idCompany, authJson))
 		// log.Println(config.SetData("admin"+string(idCompany), ss))
 	}
 	return ""
@@ -95,7 +96,7 @@ func InitializingData(idCompany string) {
 	// masterwarehouse:=`{"name":"Gudang A","code":"GA","stokmin":3000,"stokmax":10000}`
 	// models.BulkDocs("c"+idCompany,jsonData)
 }
-func CreateDBCompany(idCompany string) string {
+func CreateDBCompany(user string, pass string, idCompany string) string {
 	return models.CreateDatabase("c_" + idCompany)
 }
 func Find(c *gin.Context) string {
@@ -153,7 +154,7 @@ func CreateUserDB(c *gin.Context) string {
 		return `{"error":"Please insert db variable"}`
 	}
 	jsonData, _ := c.GetRawData()
-	return models.CreateUserDB(jsonData)
+	return models.CreateUserDB(string(jsonData))
 }
 func GetView(c *gin.Context) string {
 	if c.Query("db") == "" || c.Query("ddoc") == "" || c.Query("view") == "" {

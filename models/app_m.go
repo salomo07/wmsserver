@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"log"
 	"wms/config"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ type UpdateObjt struct {
 type UserDBObjt struct {
 	Name     string `json:"name"`
 	Password string `json:"password"`
-	Type string `json:"type"`
+	Type     string `json:"type"`
 }
 
 func FindDoc(db string, jsonData []byte) string {
@@ -59,17 +60,18 @@ func GetView(db string, ddoc string, view string, jsonData []byte) string {
 func BulkDocs(db string, jsonData []byte) string {
 	return config.BulkDocs(db, string(jsonData))
 }
-func CreateUserDB(jsonData []byte) string {
+func CreateUserDB(strbody string) string {
+	log.Println(strbody)
 	var objt UserDBObjt
-	err := json.Unmarshal([]byte(string(jsonData)), &objt)
+	err := json.Unmarshal([]byte(strbody), &objt)
 	if err != nil {
 		return `{"error":"` + err.Error() + `"}`
 	}
 	if objt.Name == "" || objt.Password == "" {
 		return `{"error":"Please insert name & password"}`
 	}
-	objt.Type="user"
-	return config.CreateUserDB(objt.Name, string(jsonData))
+	objt.Type = "user"
+	return config.CreateUserDB(objt.Name, strbody)
 }
 func CreateReplication(c *gin.Context) string {
 	jsonData, _ := c.GetRawData()
@@ -81,6 +83,6 @@ func SetRedis(key string, val string) string {
 func GetRedis(key string) string {
 	return config.GetData(key)
 }
-func InsertAuthorDB(db string,strquery string)(string){
-	return InsertAuthorDB(db,strquery)
+func InsertAuthorDB(db string, strquery string) string {
+	return InsertAuthorDB(db, strquery)
 }
