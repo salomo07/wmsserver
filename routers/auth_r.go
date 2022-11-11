@@ -64,5 +64,9 @@ func CouchDBRouter(r *gin.Engine) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200, controllers.CheckSession(c))
 		})
+		master.POST("/insertuathordb", func(c *gin.Context) {
+			c.Header("Content-Type", "application/json; charset=utf-8")
+			c.String(200, controllers.InsertAuthorDB(c))
+		})
 	}
 }

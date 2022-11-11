@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"log"
 	"wms/config"
 
 	"github.com/gin-gonic/gin"
@@ -51,6 +50,9 @@ func DeleteDoc(db string, jsonData []byte) string {
 func CreateDatabase(db string) string {
 	return config.CreateDatabase(db)
 }
+func CreateDatabase2(userdb string, passdb string, db string) string {
+	return config.CreateDatabase2(userdb, passdb, db)
+}
 func DeleteDatabase(db string) string {
 	return config.DeleteDatabase(db)
 }
@@ -61,7 +63,6 @@ func BulkDocs(db string, jsonData []byte) string {
 	return config.BulkDocs(db, string(jsonData))
 }
 func CreateUserDB(strbody string) string {
-	log.Println(strbody)
 	var objt UserDBObjt
 	err := json.Unmarshal([]byte(strbody), &objt)
 	if err != nil {
@@ -84,5 +85,5 @@ func GetRedis(key string) string {
 	return config.GetData(key)
 }
 func InsertAuthorDB(db string, strquery string) string {
-	return InsertAuthorDB(db, strquery)
+	return config.InsertAuthorDB(db, strquery)
 }
