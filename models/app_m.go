@@ -18,11 +18,17 @@ type UserDBObjt struct {
 	Type     string `json:"type"`
 }
 
+func FindDocByRoot(db string, jsonData []byte) string {
+	return config.FindDoc(db+"/_find", string(jsonData))
+}
 func FindDoc(db string, jsonData []byte) string {
 	return config.FindDoc(db+"/_find", string(jsonData))
 }
 func InsertDoc(db string, jsonData []byte) string {
 	return config.InsertDoc(db, string(jsonData))
+}
+func InsertDoc2(basiccred string, db string, jsonData []byte) string {
+	return config.InsertDoc2(basiccred, db, string(jsonData))
 }
 func UpdateDoc(db string, jsonData []byte) string {
 	var objt UpdateObjt
@@ -50,8 +56,8 @@ func DeleteDoc(db string, jsonData []byte) string {
 func CreateDatabase(db string) string {
 	return config.CreateDatabase(db)
 }
-func CreateDatabase2(userdb string, passdb string, db string) string {
-	return config.CreateDatabase2(userdb, passdb, db)
+func CreateDatabase2(basiccred string, userdb string, passdb string, db string) string {
+	return config.CreateDatabase2(basiccred, db)
 }
 func DeleteDatabase(db string) string {
 	return config.DeleteDatabase(db)

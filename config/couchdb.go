@@ -23,48 +23,51 @@ func init() {
 }
 
 func BulkDocs(db string, strquery string) string {
-	return Request("POST", db+"/_bulk_docs", strquery)
+	return RequestByRoot("POST", db+"/_bulk_docs", strquery)
 }
 func FindDoc(db string, strquery string) string {
-	return Request("POST", db+"/_find", strquery)
+	return RequestByRoot("POST", db+"/_find", strquery)
 }
-func FindDoc2(userdb string, passdb string, db string, strquery string) string {
-	return Request2(userdb, passdb, "POST", db+"/_find", strquery)
+func FindDoc2(basiccred string, passdb string, db string, strquery string) string {
+	return RequestByCompany(basiccred, "POST", db+"/_find", strquery)
 }
 func InsertDoc(path string, strquery string) string {
-	return Request("POST", path, strquery)
+	return RequestByRoot("POST", path, strquery)
+}
+func InsertDoc2(basiccred string, path string, strquery string) string {
+	return RequestByCompany(basiccred, "POST", path, strquery)
 }
 func UpdateDoc(path string, strquery string) string {
-	return Request("PUT", path, strquery)
+	return RequestByRoot("PUT", path, strquery)
 }
 func DeleteDoc(path string) string {
-	return Request("DELETE", path, "")
+	return RequestByRoot("DELETE", path, "")
 }
 func CreateDatabase(db string) string {
-	return Request("PUT", db, "")
+	return RequestByRoot("PUT", db, "")
 }
-func CreateDatabase2(userdb string, passdb string, db string) string {
-	return Request2(userdb, passdb, "PUT", db, "")
+func CreateDatabase2(basiccred string, db string) string {
+	return RequestByCompany(basiccred, "PUT", db, "")
 }
 func DeleteDatabase(db string) string {
-	return Request("DELETE", db, "")
+	return RequestByRoot("DELETE", db, "")
 }
 func CreateUserDB(username string, strquery string) string {
-	return Request("PUT", "_users/org.couchdb.user:"+username, strquery)
+	return RequestByRoot("PUT", "_users/org.couchdb.user:"+username, strquery)
 }
 func InsertAuthorDB(db string, strquery string) string {
-	return Request("PUT", db+"/_security", strquery)
+	return RequestByRoot("PUT", db+"/_security", strquery)
 }
 func GetAuthorDB(db string, strquery string) string {
-	return Request("GET", db+"/_security", strquery)
+	return RequestByRoot("GET", db+"/_security", strquery)
 }
 func CreateReplication(strquery string) string {
-	return Request("POST", "_replicate", strquery)
+	return RequestByRoot("POST", "_replicate", strquery)
 }
 func GetDataByView(db string, dsgname string, viewname string, str string) string {
-	return Request("POST", db+"/_design/"+dsgname+"/_view/"+viewname, str)
+	return RequestByRoot("POST", db+"/_design/"+dsgname+"/_view/"+viewname, str)
 }
-func Request(method string, pathURL string, strquery string) string {
+func RequestByRoot(method string, pathURL string, strquery string) string {
 
 	payload := strings.NewReader(strquery)
 	client := &http.Client{}
@@ -90,8 +93,8 @@ func Request(method string, pathURL string, strquery string) string {
 	}
 	return string(body)
 }
-func Request2(userdb string, passdb string, method string, pathURL string, strquery string) string {
-	DB_URL := "https://" + userdb + ":" + passdb + "@" + DB_BASE_URL + "/"
+func RequestByCompany(basiccred string, method string, pathURL string, strquery string) string {
+	DB_URL := "https://" + DB_BASE_URL + "/"
 	log.Println(DB_URL)
 	payload := strings.NewReader(strquery)
 	client := &http.Client{}
@@ -102,7 +105,7 @@ func Request2(userdb string, passdb string, method string, pathURL string, strqu
 		return string(`{"error":` + errCon.Error() + `}`)
 	}
 	req.Header.Add("Content-Type", "application/json")
-
+	req.Header.Add("Authorization", "Basic "+basiccred)
 	res, errDo := client.Do(req)
 	if errDo != nil {
 		log.Println(errDo, " yyy")

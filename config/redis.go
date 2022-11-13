@@ -42,7 +42,7 @@ func init() {
 		log.Println("Error : Fail to load .env file")
 	}
 	log.Println(".env is loaded")
-	REDIS_SERVER = os.Getenv("REDIS_STRING")
+	REDIS_SERVER = os.Getenv("REDIS_HOST_LOCAL")
 }
 func CheckSession(c *gin.Context) (string, string) {
 	// var rst =""
@@ -77,7 +77,7 @@ func SetData(key string, data string) string {
 	}
 
 	// rdb := redis.NewClient(&redis.Options{Addr:REDIS_SERVER,Password:"passredis",DB:0})
-	rdb := redis.NewClient(&redis.Options{Addr: REDIS_SERVER, Password: "tyue245x95h4eOm1HdjTYCr98LHDstJI", DB: 0})
+	rdb := redis.NewClient(&redis.Options{Addr: REDIS_SERVER, Password: "passredis", DB: 0})
 	err := rdb.Set(ctx, key, data, 0).Err()
 	if err != nil {
 		return `{"error":"` + err.Error() + `"}`
@@ -91,8 +91,6 @@ func GetData(key string) string {
 	rdb := redis.NewClient(&redis.Options{Addr: REDIS_SERVER, Password: "passredis", DB: 0})
 	val, err := rdb.Get(ctx, key).Result()
 	if err != nil {
-		log.Println("sssss")
-
 		return `{"error":"` + err.Error() + `"}`
 	}
 	return val

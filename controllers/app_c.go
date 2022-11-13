@@ -19,21 +19,21 @@ type CompanyObjt struct {
 	Id string `json:"id"`
 	Ok bool   `json:"ok"`
 }
-type UserDBObjt struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Roles    string `json:"roles"`
+
+// type UserDBObjt struct {
+// 	Username string `json:"username"`
+// 	Password string `json:"password"`
+// 	Roles    string `json:"roles"`
+// }
+type SessionErrorObjt struct {
+	Error string `json:"error" binding:"required"`
 }
-type AdminsRole struct {
-	Names string `json:"names"`
-	Roles string `json:"roles"`
+type UserObjt struct {
+	Id        string `json:"_id"`
+	Idcompany string `json:"idcompany"`
 }
-type AuthorDBObjt struct {
-	Admins  AdminsRole `json:"admins"`
-	Members AdminsRole `json:"members"`
-}
-type SetObjt struct {
-	Data string `json:"data" binding:"required"`
+type ResultObjt struct {
+	Docs string `json:"docs"`
 }
 
 func RegisterCompany(c *gin.Context) string {
@@ -51,23 +51,30 @@ func RegisterCompany(c *gin.Context) string {
 
 	if objt.Ok {
 		idCompany = objt.Id
-		currentTime := time.Now().Format("2006-01-02")
-		now, _ := time.Parse("2006-01-02", currentTime)
-		password := strconv.FormatInt(now.Unix(), 10)
-		// CreateDBCompany(idCompany)
 
-		authJson := `{"admins": { "names": ["admin` + idCompany + `"]}}`
-		// userJson := `{"name": "admin` + idCompany + `", "password": "` + password + `", "roles": ["members","admins"],"type":"user"}`
-		log.Println("ID :" + "c_" + idCompany + " Password : " + password)
-		// log.Println(models.CreateUserDB(userJson))
-		log.Println(models.InsertAuthorDB("c_"+idCompany, authJson))
+		// CreateDBCompany(idCompany)
+		dbname := "c_" + idCompany
+		userdb := "admin" + idCompany
+		password := strconv.FormatInt(time.Now().UnixNano(), 10)
+		authJson := `{"admins": { "names": ["` + userdb + `"],"roles":["admins"]}}`
+		userJson := `{"name": "` + userdb + `", "password": "` + password + `", "roles": ["members","admins"],"type":"user"}`
+		sessionJson := `{"userdb":"` + userdb + `","passdb":"` + password + `",dbname:"` + dbname + `"}`
+		log.Println("ID :" + dbname + " Password : " + password)
+		log.Println("CreateUserDB ---- " + models.CreateUserDB(userJson))
+		log.Println("CreateDatabase ---- " + models.CreateDatabase("c_"+idCompany))
+		log.Println("InsertAuthorDB ---- " + models.InsertAuthorDB(dbname, authJson))
+
 		// log.Println(models.GetAuthorDB("c_"+idCompany, authJson))
-		// log.Println(config.SetData("admin"+string(idCompany), ss))
+		log.Println("SetData ---- " + config.SetData(userdb, sessionJson))
 	}
 	return ""
 }
-
-func CheckSession(c *gin.Context) string {
+func InsertAuthorDB(c *gin.Context) string {
+	jsonData, _ := c.GetRawData()
+	db := c.Query("db")
+	return models.InsertAuthorDB(db, string(jsonData))
+}
+func CheckUserSession(c *gin.Context) string {
 	apikey := c.GetHeader("Authorization")
 	if apikey == "" {
 		return `{"error":"You must have api key"}`
@@ -77,18 +84,43 @@ func CheckSession(c *gin.Context) string {
 	if len(splitToken) != 2 {
 		return `{"error":"Your authorization must be : 'App {your apikey}'"}`
 	}
-	var decodedByte, _ = base64.StdEncoding.DecodeString(splitToken[1])
-	return string(decodedByte)
-}
-func SetRedis(c *gin.Context) string {
-	jsonData, _ := c.GetRawData()
-	var objt SetObjt
-	err := json.Unmarshal([]byte(string(jsonData)), &objt)
-	if err == nil {
-		return models.SetRedis(c.Query("key"), objt.Data)
+	userId, err := base64.StdEncoding.DecodeString(splitToken[1])
+	if err != nil {
+		return `{"error":"` + err.Error() + `"}`
 	}
-	return `{"error":` + err.Error() + `}`
+
+	var errsession SessionErrorObjt
+
+	usrData := models.GetRedis(string(userId))
+	json.Unmarshal([]byte(usrData), &errsession)
+	log.Println(usrData)
+	if errsession.Error != "" {
+		// Jika usersession tidak ada
+		log.Println(`{"selector":{"userlist":{"$eq":"` + string(userId) + `"}}}`)
+		findUser := `{"selector":{"userlist":["` + string(userId) + `"]},"limit": 1}`
+		companyData := models.FindDocByRoot("mastercompany", []byte(findUser))
+		json.Unmarshal([]byte(usrData), &errsession)
+		return
+		// return `{"error":"Session is not found, please re-login"}`
+	} else {
+		return usrData
+	}
 }
+
+func CheckSession(c *gin.Context) string {
+	userData := CheckUserSession(c)
+	return userData
+}
+
+// func SetRedis(c *gin.Context) string {
+// 	jsonData, _ := c.GetRawData()
+// 	var objt SetObjt
+// 	err := json.Unmarshal([]byte(string(jsonData)), &objt)
+// 	if err == nil {
+// 		return models.SetRedis(c.Query("key"), objt.Data)
+// 	}
+// 	return `{"error":` + err.Error() + `}`
+// }
 func GetRedis(c *gin.Context) string {
 	return models.GetRedis(c.Query("key"))
 }
@@ -115,8 +147,9 @@ func Insert(c *gin.Context) string {
 	if db == "" {
 		return `{"error":"Please insert db variable"}`
 	}
-	jsonData, _ := c.GetRawData()
-	return models.InsertDoc(db, jsonData)
+	// jsonData, _ := c.GetRawData()
+	return CheckSession(c)
+	// return models.InsertDoc(db, jsonData)
 }
 func Update(c *gin.Context) string {
 	db := c.Query("db")
