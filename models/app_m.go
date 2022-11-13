@@ -12,11 +12,12 @@ type UpdateObjt struct {
 	Id  string `json:"_id"`
 	Rev string `json:"_rev"`
 }
-type UserDBObjt struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Type     string `json:"type"`
-}
+
+// type UserDBObjt struct {
+// 	Name     string `json:"name"`
+// 	Password string `json:"password"`
+// 	Type     string `json:"type"`
+// }
 
 func FindDocByRoot(db string, jsonData []byte) string {
 	return config.FindDoc(db+"/_find", string(jsonData))
@@ -69,7 +70,7 @@ func BulkDocs(db string, jsonData []byte) string {
 	return config.BulkDocs(db, string(jsonData))
 }
 func CreateUserDB(strbody string) string {
-	var objt UserDBObjt
+	var objt CredDBObjt
 	err := json.Unmarshal([]byte(strbody), &objt)
 	if err != nil {
 		return `{"error":"` + err.Error() + `"}`

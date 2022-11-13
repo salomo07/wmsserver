@@ -20,20 +20,12 @@ type CompanyObjt struct {
 	Ok bool   `json:"ok"`
 }
 
-// type UserDBObjt struct {
-// 	Username string `json:"username"`
-// 	Password string `json:"password"`
-// 	Roles    string `json:"roles"`
-// }
 type SessionErrorObjt struct {
 	Error string `json:"error" binding:"required"`
 }
-type UserObjt struct {
-	Id        string `json:"_id"`
-	Idcompany string `json:"idcompany"`
-}
+
 type ResultObjt struct {
-	Docs string `json:"docs"`
+	Docs []models.CompanyObjt `json:"docs"`
 }
 
 func RegisterCompany(c *gin.Context) string {
@@ -74,42 +66,55 @@ func InsertAuthorDB(c *gin.Context) string {
 	db := c.Query("db")
 	return models.InsertAuthorDB(db, string(jsonData))
 }
-func CheckUserSession(c *gin.Context) string {
+func CheckUserSession(c *gin.Context) (bool, string) {
 	apikey := c.GetHeader("Authorization")
 	if apikey == "" {
-		return `{"error":"You must have api key"}`
+		return false, "You must have api key"
 	}
 	splitToken := strings.Split(apikey, "App ")
 
 	if len(splitToken) != 2 {
-		return `{"error":"Your authorization must be : 'App {your apikey}'"}`
+		return false, "Your authorization must be : 'App {your apikey}'"
 	}
 	userId, err := base64.StdEncoding.DecodeString(splitToken[1])
 	if err != nil {
-		return `{"error":"` + err.Error() + `"}`
+		return false, err.Error()
 	}
 
 	var errsession SessionErrorObjt
-
 	usrData := models.GetRedis(string(userId))
 	json.Unmarshal([]byte(usrData), &errsession)
-	log.Println(usrData)
 	if errsession.Error != "" {
-		// Jika usersession tidak ada
-		log.Println(`{"selector":{"userlist":{"$eq":"` + string(userId) + `"}}}`)
-		findUser := `{"selector":{"userlist":["` + string(userId) + `"]},"limit": 1}`
-		companyData := models.FindDocByRoot("mastercompany", []byte(findUser))
-		json.Unmarshal([]byte(usrData), &errsession)
-		return
-		// return `{"error":"Session is not found, please re-login"}`
+		return false, `Session is not found, please re-login`
 	} else {
-		return usrData
+		return true, usrData
 	}
 }
-
-func CheckSession(c *gin.Context) string {
-	userData := CheckUserSession(c)
-	return userData
+func TryLogin() string {
+	log.Println(`{"selector":{"users":[""]},"fields": ["_id"]}`)
+	findUser := `{"selector":{"users":[""]},"fields": ["_id]}`
+	companyData := models.FindDocByRoot("mastercompany", []byte(findUser))
+	var comObject ResultObjt
+	json.Unmarshal([]byte(companyData), &comObject)
+	if len(comObject.Docs) == 0 {
+		return `{"error":"Youre not register yet"}`
+	} else {
+		company, _ := json.Marshal(comObject.Docs[0])
+		return string(company)
+	}
+}
+func GetSessionCred(c *gin.Context) (cred models.CredDBObjt) {
+	exist, msg := CheckUserSession(c)
+	if exist == true {
+		//	Get CredDB from Redis
+		var usr models.UserObjt
+		var cred models.UserObjt
+		json.Unmarshal([]byte(msg), &usr)
+		json.Unmarshal([]byte(models.GetRedis("admin"+usr.Idcompany)), &cred)
+		return cred
+	} else {
+		return cred
+	}
 }
 
 // func SetRedis(c *gin.Context) string {
