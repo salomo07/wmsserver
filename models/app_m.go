@@ -28,8 +28,8 @@ func FindDoc(db string, jsonData []byte) string {
 func InsertDoc(db string, jsonData []byte) string {
 	return config.InsertDoc(db, string(jsonData))
 }
-func InsertDoc2(basiccred string, db string, jsonData []byte) string {
-	return config.InsertDoc2(basiccred, db, string(jsonData))
+func InsertDocByCompany(basiccred string, db string, strbody string) string {
+	return config.InsertDocByCompany(basiccred, db, strbody)
 }
 func UpdateDoc(db string, jsonData []byte) string {
 	var objt UpdateObjt

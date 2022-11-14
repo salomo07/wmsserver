@@ -22,20 +22,17 @@ func init() {
 	DB_BASE_URL = os.Getenv("HOST_DB")
 }
 
-func BulkDocs(db string, strquery string) string {
-	return RequestByRoot("POST", db+"/_bulk_docs", strquery)
-}
 func FindDoc(db string, strquery string) string {
 	return RequestByRoot("POST", db+"/_find", strquery)
 }
-func FindDoc2(basiccred string, passdb string, db string, strquery string) string {
+func FindDocByCompany(basiccred string, db string, strquery string) string {
 	return RequestByCompany(basiccred, "POST", db+"/_find", strquery)
 }
 func InsertDoc(path string, strquery string) string {
 	return RequestByRoot("POST", path, strquery)
 }
-func InsertDoc2(basiccred string, path string, strquery string) string {
-	return RequestByCompany(basiccred, "POST", path, strquery)
+func InsertDocByCompany(basiccred string, db string, strquery string) string {
+	return RequestByCompany(basiccred, "POST", db, strquery)
 }
 func UpdateDoc(path string, strquery string) string {
 	return RequestByRoot("PUT", path, strquery)
@@ -67,6 +64,9 @@ func CreateReplication(strquery string) string {
 func GetDataByView(db string, dsgname string, viewname string, str string) string {
 	return RequestByRoot("POST", db+"/_design/"+dsgname+"/_view/"+viewname, str)
 }
+func BulkDocs(db string, strquery string) string {
+	return RequestByRoot("POST", db+"/_bulk_docs", strquery)
+}
 func RequestByRoot(method string, pathURL string, strquery string) string {
 
 	payload := strings.NewReader(strquery)
@@ -94,8 +94,7 @@ func RequestByRoot(method string, pathURL string, strquery string) string {
 	return string(body)
 }
 func RequestByCompany(basiccred string, method string, pathURL string, strquery string) string {
-	DB_URL := "https://" + DB_BASE_URL + "/"
-	log.Println(DB_URL)
+	DB_URL := "https://" + basiccred + "@" + DB_BASE_URL + "/"
 	payload := strings.NewReader(strquery)
 	client := &http.Client{}
 	req, errCon := http.NewRequest(method, DB_URL+pathURL, payload)

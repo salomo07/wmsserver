@@ -66,28 +66,31 @@ func InsertAuthorDB(c *gin.Context) string {
 	db := c.Query("db")
 	return models.InsertAuthorDB(db, string(jsonData))
 }
-func CheckUserSession(c *gin.Context) (bool, string) {
+func CheckUserSession(c *gin.Context) (bool, string, models.UserObjt) {
 	apikey := c.GetHeader("Authorization")
+	var usr models.UserObjt
 	if apikey == "" {
-		return false, "You must have api key"
+		return false, "You must have api key", usr
 	}
 	splitToken := strings.Split(apikey, "App ")
 
 	if len(splitToken) != 2 {
-		return false, "Your authorization must be : 'App {your apikey}'"
+		return false, "Your authorization must be : 'App {your apikey}'", usr
 	}
 	userId, err := base64.StdEncoding.DecodeString(splitToken[1])
 	if err != nil {
-		return false, err.Error()
+		return false, err.Error(), usr
 	}
 
 	var errsession SessionErrorObjt
 	usrData := models.GetRedis(string(userId))
 	json.Unmarshal([]byte(usrData), &errsession)
 	if errsession.Error != "" {
-		return false, `Session is not found, please re-login`
+		return false, `Session is not found, please re-login`, usr
 	} else {
-		return true, usrData
+
+		json.Unmarshal([]byte(usrData), &usr)
+		return true, "", usr
 	}
 }
 func TryLogin() string {
@@ -103,31 +106,24 @@ func TryLogin() string {
 		return string(company)
 	}
 }
-func GetSessionCred(c *gin.Context) (models.CredDBObjt, string) {
-	exist, msg := CheckUserSession(c)
-	log.Println(msg)
+func GetSessionCred(c *gin.Context) (string, string, string) {
+	valid, msg, userData := CheckUserSession(c)
+	log.Println(userData, msg)
 	var cred models.CredDBObjt
-	var usr models.UserObjt
-	if exist == true {
+	if valid == true {
 		//	Get CredDB from Redis
-
-		json.Unmarshal([]byte(msg), &usr)
-		json.Unmarshal([]byte(models.GetRedis("admin"+usr.Idcompany)), &cred)
-		return cred, msg
-	} else {
-		return cred, msg
+		log.Println(models.GetRedis("admin" + userData.Idcompany))
+		json.Unmarshal([]byte(models.GetRedis("admin"+userData.Idcompany)), &cred)
+		return cred.Name + ":" + cred.Password, cred.DBName, ""
 	}
+
+	return "", "", msg
 }
 
-// func SetRedis(c *gin.Context) string {
-// 	jsonData, _ := c.GetRawData()
-// 	var objt SetObjt
-// 	err := json.Unmarshal([]byte(string(jsonData)), &objt)
-// 	if err == nil {
-// 		return models.SetRedis(c.Query("key"), objt.Data)
-// 	}
-// 	return `{"error":` + err.Error() + `}`
-// }
+func SetRedis(c *gin.Context) string {
+	jsonData, _ := c.GetRawData()
+	return models.SetRedis(c.Query("key"), string(jsonData))
+}
 func GetRedis(c *gin.Context) string {
 	return models.GetRedis(c.Query("key"))
 }
@@ -150,14 +146,29 @@ func Find(c *gin.Context) string {
 	return ""
 }
 func Insert(c *gin.Context) string {
+	creddb, dbname, msg := GetSessionCred(c)
+	if creddb == "" {
+		return `{"error":"` + msg + `"}`
+	} else {
+		log.Println(creddb, dbname, msg)
+		return models.InsertDocByCompany(creddb, dbname, msg)
+	}
+	// return models.InsertDoc(db, jsonData)
+}
+func Insert2(c *gin.Context) string {
 	db := c.Query("db")
 	if db == "" {
 		return `{"error":"Please insert db variable"}`
 	}
-	// jsonData, _ := c.GetRawData()
-	var credDB, msg = GetSessionCred(c)
-	log.Println(credDB, msg)
-	return ""
+	jsonData, _ := c.GetRawData()
+	var user models.UserObjt
+	json.Unmarshal(jsonData, &user)
+	log.Println(GetMD5Hash(user.Password))
+	user.Password = GetMD5Hash(user.Password)
+	rst, _ := json.Marshal(user)
+	log.Println(string(rst))
+
+	return models.InsertDoc(db, rst)
 	// return models.InsertDoc(db, jsonData)
 }
 func Update(c *gin.Context) string {
