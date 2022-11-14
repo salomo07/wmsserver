@@ -103,17 +103,19 @@ func TryLogin() string {
 		return string(company)
 	}
 }
-func GetSessionCred(c *gin.Context) (cred models.CredDBObjt) {
+func GetSessionCred(c *gin.Context) (models.CredDBObjt, string) {
 	exist, msg := CheckUserSession(c)
+	log.Println(msg)
+	var cred models.CredDBObjt
+	var usr models.UserObjt
 	if exist == true {
 		//	Get CredDB from Redis
-		var usr models.UserObjt
-		var cred models.UserObjt
+
 		json.Unmarshal([]byte(msg), &usr)
 		json.Unmarshal([]byte(models.GetRedis("admin"+usr.Idcompany)), &cred)
-		return cred
+		return cred, msg
 	} else {
-		return cred
+		return cred, msg
 	}
 }
 
@@ -137,15 +139,15 @@ func CreateDBCompany(user string, pass string, idCompany string) string {
 	return models.CreateDatabase("c_" + idCompany)
 }
 func Find(c *gin.Context) string {
-	var rst, err = config.CheckSession(c)
-	if err == "" {
-		db := c.Query("db")
-		jsonData, _ := c.GetRawData()
-		rst = models.FindDoc(db, jsonData)
-	} else {
-		rst = err
-	}
-	return rst
+
+	// if credDB != nil {
+	// 	db := c.Query("db")
+	// 	jsonData, _ := c.GetRawData()
+	// 	rst = models.FindDoc(db, jsonData)
+	// } else {
+	// 	rst = err
+	// }
+	return ""
 }
 func Insert(c *gin.Context) string {
 	db := c.Query("db")
@@ -153,7 +155,9 @@ func Insert(c *gin.Context) string {
 		return `{"error":"Please insert db variable"}`
 	}
 	// jsonData, _ := c.GetRawData()
-	return CheckSession(c)
+	var credDB, msg = GetSessionCred(c)
+	log.Println(credDB, msg)
+	return ""
 	// return models.InsertDoc(db, jsonData)
 }
 func Update(c *gin.Context) string {

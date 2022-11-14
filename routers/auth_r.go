@@ -63,7 +63,7 @@ func CouchDBRouter(r *gin.Engine) {
 		})
 		master.POST("/checksession", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
-			c.String(200, controllers.CheckSession(c))
+			c.String(200, "")
 		})
 		master.POST("/insertuathordb", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
