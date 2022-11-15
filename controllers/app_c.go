@@ -45,21 +45,24 @@ func RegisterCompany(c *gin.Context) string {
 		idCompany = objt.Id
 
 		// CreateDBCompany(idCompany)
-		dbname := "c_" + idCompany
+		dbname := "db_" + idCompany
 		userdb := "admin" + idCompany
 		password := strconv.FormatInt(time.Now().UnixNano(), 10)
 		authJson := `{"admins": { "names": ["` + userdb + `"],"roles":["admins"]}}`
-		userJson := `{"name": "` + userdb + `", "password": "` + password + `", "roles": ["members","admins"],"type":"user"}`
+		userDBJson := `{"name": "` + userdb + `", "password": "` + password + `", "roles": ["members","admins"],"type":"user"}`
 		sessionJson := `{"userdb":"` + userdb + `","passdb":"` + password + `",dbname:"` + dbname + `"}`
 		log.Println("ID :" + dbname + " Password : " + password)
-		log.Println("CreateUserDB ---- " + models.CreateUserDB(userJson))
-		log.Println("CreateDatabase ---- " + models.CreateDatabase("c_"+idCompany))
+		log.Println("CreateUserDB ---- " + models.CreateUserDB(userDBJson))
+		log.Println("CreateDatabase ---- " + models.CreateDatabase(dbname))
 		log.Println("InsertAuthorDB ---- " + models.InsertAuthorDB(dbname, authJson))
 
-		// log.Println(models.GetAuthorDB("c_"+idCompany, authJson))
 		log.Println("SetData ---- " + config.SetData(userdb, sessionJson))
 	}
 	return ""
+}
+func AddRolesDefault(c *gin.Context) string {
+	return ""
+	// log.Println("Add role ---- " + models.InsertDocByCompany(dbname, authJson))
 }
 func InsertAuthorDB(c *gin.Context) string {
 	jsonData, _ := c.GetRawData()
@@ -131,9 +134,9 @@ func InitializingData(idCompany string) {
 	// masterwarehouse:=`{"name":"Gudang A","code":"GA","stokmin":3000,"stokmax":10000}`
 	// models.BulkDocs("c"+idCompany,jsonData)
 }
-func CreateDBCompany(user string, pass string, idCompany string) string {
-	return models.CreateDatabase("c_" + idCompany)
-}
+// func CreateDBCompany(user string, pass string, idCompany string) string {
+// 	return models.CreateDatabase("c_" + idCompany)
+// }
 func Find(c *gin.Context) string {
 
 	// if credDB != nil {
