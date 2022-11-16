@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-11-16T10:05:08.380Z" agent="5.0 (Windows)" etag="OKjUk4MqljltbGiWbS_p" version="20.5.1" type="github">
+<mxfile host="app.diagrams.net" modified="2022-11-16T10:24:04.168Z" agent="5.0 (Windows)" etag="hw8ASz3ivpI7aqn1aaPA" version="20.5.1" type="github">
   <diagram id="B4sp6tkjbq-qY0KO3aS_" name="Page-1">
-    <mxGraphModel dx="511" dy="1354" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="672" dy="1362" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -266,6 +266,19 @@
             <mxRectangle width="190" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="huxQKb0KZZLIL76tW-9W-15" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="GO1e90xstaqXlvDwQSsc-36">
+          <mxGeometry y="360" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="huxQKb0KZZLIL76tW-9W-16" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;" vertex="1" parent="huxQKb0KZZLIL76tW-9W-15">
+          <mxGeometry width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="huxQKb0KZZLIL76tW-9W-17" value="document -&gt; table : &quot;customer&quot;" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" vertex="1" parent="huxQKb0KZZLIL76tW-9W-15">
+          <mxGeometry x="30" width="190" height="30" as="geometry">
+            <mxRectangle width="190" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="GO1e90xstaqXlvDwQSsc-133" value="doc &gt; table :&quot;user&quot;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fontColor=#3333FF;strokeColor=#0000FF;" parent="1" vertex="1">
           <mxGeometry x="550" y="80" width="220" height="110" as="geometry" />
         </mxCell>
@@ -468,10 +481,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="GO1e90xstaqXlvDwQSsc-336" value="doc &gt; table :&quot;product&quot;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fontColor=#67AB9F;strokeColor=#67AB9F;" parent="1" vertex="1">
-          <mxGeometry x="535" y="570" width="250" height="130" as="geometry" />
+          <mxGeometry x="535" y="570" width="250" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="GO1e90xstaqXlvDwQSsc-337" value="name : (string, unique)&#xa;codename : (string, unique)&#xa;sku : (string)&#xa;imagesurl : [&quot;&quot;]&#xa;category : &quot;{{_idcategory}}&quot;&#xa;isactive : (bool)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontColor=#000000;" parent="GO1e90xstaqXlvDwQSsc-336" vertex="1">
-          <mxGeometry y="30" width="250" height="100" as="geometry" />
+        <mxCell id="GO1e90xstaqXlvDwQSsc-337" value="name : (string, unique)&#xa;codename : (string, unique)&#xa;sku : (string)&#xa;type : (string) - &quot;supply / output&quot;&#xa;imagesurl : [&quot;&quot;]&#xa;category : &quot;{{_idcategory}}&quot;&#xa;isactive : (bool)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontColor=#000000;" parent="GO1e90xstaqXlvDwQSsc-336" vertex="1">
+          <mxGeometry y="30" width="250" height="110" as="geometry" />
         </mxCell>
         <mxCell id="GO1e90xstaqXlvDwQSsc-338" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontColor=#67AB9F;" parent="1" source="GO1e90xstaqXlvDwQSsc-55" target="GO1e90xstaqXlvDwQSsc-336" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -503,10 +516,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="huxQKb0KZZLIL76tW-9W-1" value="doc &gt; table :&quot;po&quot;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fontColor=#990099;strokeColor=#990099;" vertex="1" parent="1">
-          <mxGeometry x="545" y="1120" width="250" height="190" as="geometry" />
+          <mxGeometry x="535" y="1120" width="250" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="huxQKb0KZZLIL76tW-9W-2" value="nopo : (string)&#xa;datepo: (string)&#xa;supplier : {docsupplier}&#xa;invoicedate : (string)&#xa;nopo : (string)&#xa;duedate : (string)&#xa;loadby : [{{_iduser}}]&#xa;checkby : {{_iduser}}&#xa;approveby : {{_iduser}}&#xa;product : [{{_idproduct}}]&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontColor=#000000;" vertex="1" parent="huxQKb0KZZLIL76tW-9W-1">
-          <mxGeometry y="30" width="250" height="160" as="geometry" />
+        <mxCell id="huxQKb0KZZLIL76tW-9W-2" value="nopo : (string)&#xa;datepo: (string)&#xa;supplier : {docsupplier}&#xa;comments : (string)&#xa;details : [{objectdetailpo}]&#xa;&#xa;&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontColor=#000000;" vertex="1" parent="huxQKb0KZZLIL76tW-9W-1">
+          <mxGeometry y="30" width="250" height="90" as="geometry" />
         </mxCell>
         <mxCell id="huxQKb0KZZLIL76tW-9W-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.003;entryY=0.095;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="GO1e90xstaqXlvDwQSsc-98" target="huxQKb0KZZLIL76tW-9W-8">
           <mxGeometry relative="1" as="geometry">
@@ -518,9 +531,9 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="huxQKb0KZZLIL76tW-9W-8" value="doc &gt; table :&quot;invoice&quot;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fontColor=#990099;strokeColor=#990099;" vertex="1" parent="1">
-          <mxGeometry x="545" y="900" width="250" height="190" as="geometry" />
+          <mxGeometry x="535" y="900" width="250" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="huxQKb0KZZLIL76tW-9W-9" value="noinvoice: (string)&#xa;billto : (string)&#xa;shipto : (string)&#xa;invoicedate : (string)&#xa;nopo : (string)&#xa;duedate : (string)&#xa;loadby : [{{_iduser}}]&#xa;checkby : {{_iduser}}&#xa;approveby : {{_iduser}}&#xa;product : [{{_idproduct}}]&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontColor=#000000;" vertex="1" parent="huxQKb0KZZLIL76tW-9W-8">
+        <mxCell id="huxQKb0KZZLIL76tW-9W-9" value="noinvoice: (string)&#xa;billto : (string)&#xa;shipto : (string)&#xa;invoicedate : (string)&#xa;nopo : (string)&#xa;duedate : (string)&#xa;loadby : [{{_iduser}}]&#xa;checkby : {{_iduser}}&#xa;approveby : {{_iduser}}&#xa;details: [{objectdetailinvoice}]&#xa;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontColor=#000000;" vertex="1" parent="huxQKb0KZZLIL76tW-9W-8">
           <mxGeometry y="30" width="250" height="160" as="geometry" />
         </mxCell>
       </root>
