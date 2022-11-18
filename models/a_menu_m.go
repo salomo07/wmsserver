@@ -10,6 +10,7 @@ type MenuModels struct {
 	Desc     string         `json:"desc"`
 	Submenus []SubmenuModel `json:"submenus"`
 	Isactive bool           `json:"isactive"`
+	Table    string         `json:"table" binding:"required"`
 }
 type SubmenuModel struct {
 	Id       string `json:"_id"`
