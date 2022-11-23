@@ -24,9 +24,9 @@ type SessionErrorObjt struct {
 	Error string `json:"error" binding:"required"`
 }
 
-type ResultObjt struct {
-	Docs []models.CompanyObjt `json:"docs"`
-}
+// type ResultObjt struct {
+// 	Docs []models.CompanyObjt `json:"docs"`
+// }
 
 func RegisterCompany(c *gin.Context) string {
 	jsonData, _ := c.GetRawData()
@@ -69,9 +69,9 @@ func InsertAuthorDB(c *gin.Context) string {
 	db := c.Query("db")
 	return models.InsertAuthorDB(db, string(jsonData))
 }
-func CheckUserSession(c *gin.Context) (bool, string, models.UserObjt) {
+func CheckUserSession(c *gin.Context) (bool, string, models.UserModel) {
 	apikey := c.GetHeader("Authorization")
-	var usr models.UserObjt
+	var usr models.UserModel
 	if apikey == "" {
 		return false, "You must have api key", usr
 	}
@@ -100,7 +100,7 @@ func TryLogin() string {
 	log.Println(`{"selector":{"users":[""]},"fields": ["_id"]}`)
 	findUser := `{"selector":{"users":[""]},"fields": ["_id]}`
 	companyData := models.FindDocByRoot("mastercompany", []byte(findUser))
-	var comObject ResultObjt
+
 	json.Unmarshal([]byte(companyData), &comObject)
 	if len(comObject.Docs) == 0 {
 		return `{"error":"Youre not register yet"}`
@@ -134,6 +134,7 @@ func InitializingData(idCompany string) {
 	// masterwarehouse:=`{"name":"Gudang A","code":"GA","stokmin":3000,"stokmax":10000}`
 	// models.BulkDocs("c"+idCompany,jsonData)
 }
+
 // func CreateDBCompany(user string, pass string, idCompany string) string {
 // 	return models.CreateDatabase("c_" + idCompany)
 // }
@@ -164,7 +165,7 @@ func Insert2(c *gin.Context) string {
 		return `{"error":"Please insert db variable"}`
 	}
 	jsonData, _ := c.GetRawData()
-	var user models.UserObjt
+	var user models.UserModel
 	json.Unmarshal(jsonData, &user)
 	log.Println(GetMD5Hash(user.Password))
 	user.Password = GetMD5Hash(user.Password)
