@@ -100,27 +100,28 @@ func TryLogin() string {
 	log.Println(`{"selector":{"users":[""]},"fields": ["_id"]}`)
 	findUser := `{"selector":{"users":[""]},"fields": ["_id]}`
 	companyData := models.FindDocByRoot("mastercompany", []byte(findUser))
-
+	var comObject models.CompanyModels
 	json.Unmarshal([]byte(companyData), &comObject)
-	if len(comObject.Docs) == 0 {
-		return `{"error":"Youre not register yet"}`
-	} else {
-		company, _ := json.Marshal(comObject.Docs[0])
-		return string(company)
-	}
+	// if len(comObject.Docs) == 0 {
+	// 	return `{"error":"Youre not register yet"}`
+	// } else {
+	// 	company, _ := json.Marshal(comObject.Docs[0])
+	// 	return string(company)
+	// }
+	return ""
 }
 func GetSessionCred(c *gin.Context) (string, string, string) {
-	valid, msg, userData := CheckUserSession(c)
-	log.Println(userData, msg)
-	var cred models.CredDBObjt
-	if valid == true {
-		//	Get CredDB from Redis
-		log.Println(models.GetRedis("admin" + userData.Idcompany))
-		json.Unmarshal([]byte(models.GetRedis("admin"+userData.Idcompany)), &cred)
-		return cred.Name + ":" + cred.Password, cred.DBName, ""
-	}
+	// valid, msg, userData := CheckUserSession(c)
+	// log.Println(userData, msg)
+	// var cred models.CredDBObjt
+	// if valid == true {
+	// 	//	Get CredDB from Redis
+	// 	log.Println(models.GetRedis("admin" + userData.Idcompany))
+	// 	json.Unmarshal([]byte(models.GetRedis("admin"+userData.Idcompany)), &cred)
+	// 	return cred.Name + ":" + cred.Password, cred.DBName, ""
+	// }
 
-	return "", "", msg
+	return "", "", ""
 }
 
 func SetRedis(c *gin.Context) string {

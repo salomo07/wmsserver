@@ -9,7 +9,7 @@ type CompanyModels struct {
 	Contact ContactCompany `json:"contact"`
 	Address string         `json:"address"`
 	Users   []string       `json:"users"`
-	Shipto  bool           `json:"shipto"`
+	Shipto  string         `json:"shipto"`
 	Table   string         `json:"table" binding:"required"`
 }
 type ContactCompany struct {
