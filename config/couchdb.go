@@ -82,7 +82,7 @@ func RequestByRoot(method string, pathURL string, strquery string) string {
 	res, errDo := client.Do(req)
 	if errDo != nil {
 		log.Println(errDo, " yyy")
-		return string(`{"error":` + errDo.Error() + `}`)
+		return string(errDo.Error())
 	}
 	defer res.Body.Close()
 
@@ -91,6 +91,7 @@ func RequestByRoot(method string, pathURL string, strquery string) string {
 		log.Println(err, " zzz")
 		return string(`{"error":` + err.Error() + `}`)
 	}
+
 	return string(body)
 }
 func RequestByCompany(basiccred string, method string, pathURL string, strquery string) string {

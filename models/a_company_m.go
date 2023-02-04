@@ -26,6 +26,7 @@ func FindCompanyByR(jsonData []byte) string {
 	companyData := config.FindDoc("mastercompany", string(jsonData))
 	var comObject CompanyModels
 	json.Unmarshal([]byte(companyData), &comObject)
+	return companyData
 }
 func FindCompanyByC(basiccred string, jsonData []byte) string {
 	return config.FindDocByCompany(basiccred, "mastercompany", string(jsonData))

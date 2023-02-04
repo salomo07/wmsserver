@@ -40,7 +40,6 @@ func RegisterCompany(c *gin.Context) string {
 		log.Println(`{"error":"` + err.Error() + `"}`)
 		return `{"error":"` + err.Error() + `"}`
 	}
-
 	if objt.Ok {
 		idCompany = objt.Id
 
@@ -55,8 +54,11 @@ func RegisterCompany(c *gin.Context) string {
 		log.Println("CreateUserDB ---- " + models.CreateUserDB(userDBJson))
 		log.Println("CreateDatabase ---- " + models.CreateDatabase(dbname))
 		log.Println("InsertAuthorDB ---- " + models.InsertAuthorDB(dbname, authJson))
-
-		log.Println("SetData ---- " + config.SetData(userdb, sessionJson))
+		succRedis, errRedis := config.SetDataRedis(userdb, sessionJson)
+		if errRedis != "" {
+			return `{"error":"` + errRedis + `"}`
+		}
+		log.Println("SetData ---- " + succRedis)
 	}
 	return ""
 }
@@ -126,7 +128,11 @@ func GetSessionCred(c *gin.Context) (string, string, string) {
 
 func SetRedis(c *gin.Context) string {
 	jsonData, _ := c.GetRawData()
-	return models.SetRedis(c.Query("key"), string(jsonData))
+	res, err := models.SetRedis(c.Query("key"), string(jsonData))
+	if err != "" {
+		return err
+	}
+	return res
 }
 func GetRedis(c *gin.Context) string {
 	return models.GetRedis(c.Query("key"))
@@ -172,7 +178,7 @@ func Insert2(c *gin.Context) string {
 	user.Password = GetMD5Hash(user.Password)
 	rst, _ := json.Marshal(user)
 	log.Println(string(rst))
-
+	log.Println("success")
 	return models.InsertDoc(db, rst)
 	// return models.InsertDoc(db, jsonData)
 }

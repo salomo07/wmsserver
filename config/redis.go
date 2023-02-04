@@ -56,7 +56,7 @@ func CheckSession(c *gin.Context) (string, string) {
 	if tokenIn == "" {
 		return "", string(`{"error":"Cookie is not found"}`)
 	} else {
-		dataSession := GetData(tokenIn)
+		dataSession := GetDataRedis(tokenIn)
 		if dataSession == "" {
 			return "", string(`{"error":"Session not found"}`)
 		} else {
@@ -77,14 +77,14 @@ func CheckSession(c *gin.Context) (string, string) {
 		}
 	}
 }
-func SetData(key string, data string) string {
+func SetDataRedis(key string, data string) (string, string) {
 	err := rdb.Set(ctx, key, data, 0).Err()
 	if err != nil {
-		return `{"error":"` + err.Error() + `"}`
+		return `{"ok":true}`, `{"error":"` + err.Error() + `"}`
 	}
-	return `{"ok":true}`
+	return `{"ok":true}`, ""
 }
-func GetData(key string) string {
+func GetDataRedis(key string) string {
 	if ERROR_LOAD_ENV != "" {
 		return `{"error":"` + ERROR_LOAD_ENV + `"}`
 	}

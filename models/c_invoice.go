@@ -1,7 +1,7 @@
 package models
 
 //Buat validator/verifikator object
-
+// Type = "Buy/Sell"
 type InvoiceModel struct {
 	Id          string               `json:"_id"`
 	Rev         string               `json:"_rev"`

@@ -7,7 +7,7 @@ import (
 )
 
 func CouchDBRouter(r *gin.Engine) {
-	r.Static("assets/", "./assets")
+	// r.Static("assets/", "./assets")
 
 	master := r.Group("/couch")
 	{
@@ -18,7 +18,6 @@ func CouchDBRouter(r *gin.Engine) {
 		master.POST("/insertdoc", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")
 			c.String(200, controllers.Insert(c))
-
 		})
 		master.POST("/updatedoc", func(c *gin.Context) {
 			c.Header("Content-Type", "application/json; charset=utf-8")

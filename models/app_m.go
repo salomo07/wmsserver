@@ -88,11 +88,11 @@ func CreateReplication(c *gin.Context) string {
 	jsonData, _ := c.GetRawData()
 	return config.CreateReplication(string(jsonData))
 }
-func SetRedis(key string, val string) string {
-	return config.SetData(key, val)
+func SetRedis(key string, val string) (string, string) {
+	return config.SetDataRedis(key, val)
 }
 func GetRedis(key string) string {
-	return config.GetData(key)
+	return config.GetDataRedis(key)
 }
 func InsertAuthorDB(db string, strquery string) string {
 	return config.InsertAuthorDB(db, strquery)
